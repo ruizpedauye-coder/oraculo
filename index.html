@@ -24,7 +24,6 @@
   font-family: var(--font-family);
 }
 
-/* FONDO GLOBAL CON EL LOGO EN TODAS LAS VISTAS */
 body {
   background-image: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.85)), url('logo.jpg');
   background-size: cover;
@@ -42,7 +41,6 @@ body {
   overflow-x: hidden;
 }
 
-/* CONTENEDOR CENTRAL QUE SE ADAPTA EN TODAS LAS VISTAS */
 .app-container {
   width: 100%;
   max-width: 420px;
@@ -57,7 +55,6 @@ body {
   overflow: hidden;
 }
 
-/* SELECTOR DE BANDERAS FLOTANTE (ESTRICTAMENTE PARA LA PORTADA) */
 .flag-selector-portada {
   position: absolute;
   top: 20px;
@@ -92,7 +89,6 @@ body.portada-activa .flag-selector-portada {
   opacity: 1;
 }
 
-/* ADAPTACIÓN PARA LA PORTADA */
 body.portada-activa .app-container {
   max-width: 100vw;
   height: 100vh;
@@ -168,20 +164,9 @@ body.portada-activa .app-container {
   transform: translateY(0);
 }
 
-#view-portada.view.active {
-  display: flex;
-}
-
 .header {
   text-align: center;
   margin-bottom: 15px;
-}
-
-.header h1 {
-  font-size: 1.2rem;
-  font-weight: 500;
-  color: var(--text-primary);
-  margin-bottom: 4px;
 }
 
 .menu-grid {
@@ -254,6 +239,7 @@ body.portada-activa .app-container {
   padding: 10px 14px;
   text-align: center;
   border: 1px solid var(--border-color);
+  margin-top: 5px;
 }
 
 .audio-player-container p {
@@ -261,7 +247,6 @@ body.portada-activa .app-container {
   color: var(--accent-color);
   margin-bottom: 6px;
   font-weight: 600;
-  letter-spacing: 0.3px;
 }
 
 audio {
@@ -270,7 +255,6 @@ audio {
   outline: none;
 }
 
-/* CAJA DE SUBTÍTULOS DINÁMICOS */
 .subtitle-box {
   margin-top: 8px;
   background-color: rgba(43, 43, 43, 0.9);
@@ -304,7 +288,6 @@ audio {
   color: var(--text-primary);
 }
 
-/* BOTÓN FLOTANTE DE WHATSAPP */
 .btn-flotante-consulta {
     position: fixed;
     bottom: 15px;
@@ -324,6 +307,7 @@ audio {
     gap: 8px;
     white-space: nowrap;
 }
+
 .btn-flotante-consulta:hover {
     background-color: var(--accent-color);
 }
@@ -470,7 +454,6 @@ body.portada-activa .footer-note {
                     <source src="" type="audio/mpeg" id="audio-source">
                     Tu navegador no soporta el elemento de audio.
                 </audio>
-                <!-- CAJA DE SUBTÍTULOS DINÁMICOS -->
                 <div id="subtitle-box" class="subtitle-box">
                     <span data-i18n="sub_espera">Pulsa play para reproducir el mensaje en audio...</span>
                 </div>
@@ -493,12 +476,12 @@ let estadoActual = { categoria: '', baraja: '' };
 let idiomaActual = 'es';
 let itemSeleccionadoActual = null;
 
-// SCRIPT PARA DESPERTAR EL AUDIO DE FONDO AL PRIMER CLIC (VOLUMEN 7%)
+// DESPERTAR AUDIO DE FONDO AL PRIMER CLIC (VOLUMEN 7%)
 document.addEventListener('click', function() {
     var musica = document.getElementById('bg-music');
     if (musica && musica.muted) {
         musica.muted = false;
-        musica.volume = 0.07; // Volumen suave al 7%
+        musica.volume = 0.07;
         musica.play().catch(function(error) {
             console.log("Audio activado");
         });
@@ -679,7 +662,7 @@ const traducciones = {
         options_titulo: "Wat beschrijft je huidige staat het best?",
         res_friccion_titulo: "Wrijvingspunt",
         res_nudo_titulo: "De hoofdknoop",
-        res_accion_titulo: "Kompas (Aanbevolen actie)",
+        res_accion_titulo: "Kompass (Aanbevolen actie)",
         res_audio_titulo: "🎧 Persoonlijke oriëntatie-audio",
         sub_espera: "Druk op afspelen om naar het audiobericht te luisteren...",
         btn_whatsapp: "Persoonlijk Consult Aanvragen",
@@ -701,20 +684,14 @@ const baseDeDatos = {
             friccion: { es: "Estás intentando procesar demasiadas cosas a la vez con un nivel de energía bajo mínimos.", en: "You are trying to process too many things at once with minimal energy levels.", fr: "Vous essayez de traiter trop de choses à la fois avec un niveau d'énergie au plus bas.", de: "Du versuchst, zu viele Dinge gleichzeitig zu verarbeiten, mit minimaler Energie.", it: "Stai cercando di elaborare troppe cose insieme con un livello di energia al minimo.", nl: "Je probeert te veel tegelijk te verwerken met een minimaal energieniveau." },
             nudo: { es: "La autoexigencia constante por querer controlar lo que pasará mañana.", en: "Constant self-demand to control what will happen tomorrow.", fr: "L'exigence constante de vouloir contrôler ce qui se passera demain.", de: "Der ständige Leistungsdruck, alles kontrollieren zu wollen, was morgen passiert.", it: "La costante autoesigenza di voler controllare cosa accadrà domani.", nl: "De constante zelfoplegging om te willen controleren wat er morgen gebeurt." },
             accion: { es: "Hoy queda prohibido tomar decisiones drásticas. Elige una tarea pequeña y descansa.", en: "Today, making drastic decisions is forbidden. Choose one small task and rest.", fr: "Aujourd'hui, il est interdit de prendre des décisions drastiques. Choisissez une petite tâche et reposez-vous.", de: "Heute ist es verboten, drastische Entscheidungen zu treffen. Wähle eine kleine Aufgabe und ruhe dich aus.", it: "Oggi è vietato prendere decisioni drastiche. Scegli un piccolo compito e riposati.", nl: "Vandaag is het verboden drastische beslissingen te nemen. Kies één kleine taak en rust uit." },
-            audio: "audios/bloqueo_mental.mp3",
-            subtitulos: {
-                es: { 0: "Hola.", 1: "Cuando sientes ese atasco mental, por experiencia te digo que no es falta de capacidad, sino agotamiento.", 8: "Estás intentando procesar demasiados frentes abiertos con la energía bajo mínimos.", 14: "Tu mente pide una tregua.", 16: "Hoy no intentes resolverlo todo; baja el ritmo, elige una sola cosa pequeña que puedas hacer y suelta el resto.", 24: "Date permiso para respirar." }
-            }
+            audio: "audios/bloqueo_mental.mp3"
         },
         { 
             texto: { es: "Hay una situación externa que frena por completo.", en: "There is an external situation that completely halts progress.", fr: "Il y a une situation externe qui freine complètement.", de: "Es gibt eine äußere Situation, die alles komplett ausbremst.", it: "C'è una situazione esterna che frena completamente.", nl: "Er is een externe situatie die alles volledig afremt." },
             friccion: { es: "Te estás desgastando intentando mover una rueda que depende de factores ajenos.", en: "You are wearing yourself out trying to turn a wheel that depends on external factors.", fr: "Vous vous épuisez à essayer de faire tourner une roue qui dépend de facteurs extérieurs.", de: "Du reibst dich auf, ein Rad zu drehen, das von äußeren Faktoren abhängt.", it: "Ti stai logorando cercando di muovere una ruota che dipende da fattori esterni.", nl: "Je put jezelf uit door te proberen een wiel te draaien dat afhangt van externe factoren." },
             nudo: { es: "Resistencia a aceptar los tiempos y los imprevistos duros del entorno.", en: "Resistance to accept the timing and harsh unexpected events of the environment.", fr: "Résistance à accepter les temps et les imprévus durs de l'environnement.", de: "Widerstand gegen die Annahme von Zeiten und harten unvorhergesehenen Ereignissen.", it: "Resistenza ad accettare i tempi e gli imprevisti duri dell'ambiente.", nl: "Weerstand tegen het accepteren van de timing en harde onvoorziene gebeurtenissen." },
             accion: { es: "Pon el foco únicamente en tu metro cuadrado. Lo demás se reordenará solo.", en: "Focus solely on your square meter. Everything else will rearrange itself.", fr: "Concentrez-vous uniquement sur votre mètre carré. Le reste se réorganisera tout seul.", de: "Konzentriere dich nur auf deinen eigenen Bereich. Der Rest ordnet sich von selbst.", it: "Concentrati solo sul tuo metro quadro. Il resto si riordinerà da solo.", nl: "Focus je uitsluitend op je eigen cirkel. De rest ordent zich vanzelf." },
-            audio: "audios/bloqueo_externo.mp3",
-            subtitulos: {
-                es: { 0: "Comprendo.", 2: "Cuando el freno viene de fuera, el desgaste se multiplica porque luchas contra corriente.", 9: "Estás intentando mover una rueda que no depende de ti.", 15: "Suelta el control de lo externo y céntrate en tu metro cuadrado.", 22: "Lo demás encontrará su propio cauce a su debido tiempo." }
-            }
+            audio: "audios/bloqueo_externo.mp3"
         }
     ],
     amor: [
@@ -723,10 +700,7 @@ const baseDeDatos = {
             friccion: { es: "Expectativas no expresadas que generan fricción silenciosa.", en: "Unexpressed expectations generating silent friction.", fr: "Attentes non exprimées générant une friction silencieuse.", de: "Nicht ausgesprochene Erwartungen erzeugen stille Reibung.", it: "Aspettative non espresse che generano attrito silenzioso.", nl: "Niet-uitgesproken verwachtingen die stille wrijving veroorzaken." },
             nudo: { es: "Miedo a mostrar vulnerabilidad real por temor al rechazo.", en: "Fear of showing real vulnerability due to fear of rejection.", fr: "Peur de montrer une vraie vulnérabilité par peur du rejet.", de: "Angst, echte Verletzlichkeit zu zeigen aus Furcht vor Ablehnung.", it: "Paura di mostrare vera vulnerabilità per timore del rifiuto.", nl: "Angst om echte kwetsbaarheid te tonen uit angst voor afwijzing." },
             accion: { es: "Habla desde tu sentir íntimo sin reclamar ni culpar.", en: "Speak from your intimate feeling without demanding or blaming.", fr: "Parlez depuis votre ressenti intime sans réclamer ni blâmer.", de: "Sprich aus deinem inneren Gefühl, ohne Vorwürfe oder Forderungen.", it: "Parla dal tuo sentire intimo senza pretendere o colpevolizzare.", nl: "Spreek vanuit je diepste gevoel zonder te eisen of de schuld te geven." },
-            audio: "audios/amor_distancia.mp3",
-            subtitulos: {
-                es: { 0: "Escucha.", 2: "En los vínculos, la distancia física suele ser un reflejo de la distancia emocional o del silencio acumulado.", 10: "No busques culpables; busca expresar lo que sientes desde la calma.", 18: "Una palabra honesta y vulnerable vale más que mil reproches." }
-            }
+            audio: "audios/amor_distancia.mp3"
         }
     ],
     trabajo: [
@@ -735,10 +709,7 @@ const baseDeDatos = {
             friccion: { es: "Estás en una encrucijada donde el modelo antiguo ya no encaja.", en: "You are at a crossroads where the old model no longer fits.", fr: "Vous êtes à la croisée des chemins où l'ancien modèle ne correspond plus.", de: "Du stehst an einem Scheideweg, an dem das alte Modell nicht mehr passt.", it: "Ti trovi a un bivio in cui il vecchio modello non calza più.", nl: "Je staat op een kruispunt waar het oude model niet meer past." },
             nudo: { es: "Miedo al salto al vacío o a perder la falsa estabilidad.", en: "Fear of the leap into the void or losing false stability.", fr: "Peur du saut dans le vide ou de perdre une fausse stabilité.", de: "Angst vor dem Sprung ins Leere oder dem Verlust falscher Stabilität.", it: "Paura del salto nel vuoto o di perdere una falsa stabilità.", nl: "Angst voor de sprong in het duister of het verliezen van valse stabiliteit." },
             accion: { es: "Define tus líneas rojas y empieza a mover hilos en silencio.", en: "Define your red lines and start moving strings in silence.", fr: "Définissez vos lignes rouges et commencez à bouger les fils en silence.", de: "Definiere deine roten Linien und ziehe im Stillen die Fäden.", it: "Definisci le tue linee rosse e inizia a muovere i fili in silenzio.", nl: "Bepaal je rode lijnen en begin in stilte aan de touwtjes te trekken." },
-            audio: "audios/trabajo_rumbo.mp3",
-            subtitulos: {
-                es: { 0: "Atención.", 2: "Cuando el rumbo profesional tambalea, la vida te está pidiendo revisar tus auténticos valores.", 10: "No te aferres a estructuras que ya se han quedado pequeñas.", 17: "Define qué es lo que de verdad quieres construir y da un paso pequeño pero firme." }
-            }
+            audio: "audios/trabajo_cambio.mp3"
         }
     ],
     evolucion: [
@@ -747,10 +718,7 @@ const baseDeDatos = {
             friccion: { es: "El duelo de dejar atrás lo conocido aunque ya no te aporte vida.", en: "The grief of leaving behind the known even if it no longer brings life.", fr: "Le deuil de laisser derrière soi le connu même s'il ne vous apporte plus de vie.", de: "Die Trauer, das Bekannte hinter sich zu lassen, auch wenn es kein Leben mehr bringt.", it: "Il lutto di lasciarsi alle spalle il noto anche se non ti dà più vita.", nl: "De rouw om het bekende achter te laten, zelfs als het geen leven meer brengt." },
             nudo: { es: "Sensación de vacío intermedio entre lo viejo y lo nuevo.", en: "Feeling of intermediate emptiness between the old and the new.", fr: "Sentiment de vide intermédiaire entre l'ancien et le nouveau.", de: "Gefühl der Leere zwischen dem Alten und dem Neuen.", it: "Sensazione di vuoto intermedio tra il vecchio e il nuovo.", nl: "Gevoel van leegte tussen het oude en het nieuwe." },
             accion: { es: "Abraza el vacío. No corras a llenarlo con distracciones.", en: "Embrace the void. Don't rush to fill it with distractions.", fr: "Embrassez le vide. Ne vous précipitez pas pour le remplir.", de: "Umarme die Leere. Eile nicht, sie mit Ablenkungen zu füllen.", it: "Abbraccia il vuoto. Non correre a riempirlo con distrazioni.", nl: "Omarm de leegte. Haast je niet om deze te vullen." },
-            audio: "audios/evolucion_etapa.mp3",
-            subtitulos: {
-                es: { 0: "Escucha con calma.", 3: "Toda transición exige atravesar un espacio de vacío donde lo viejo ya no está y lo nuevo aún no ha nacido.", 12: "No tengas prisa por llenar ese hueco.", 16: "Este es un tiempo sagrado de regeneración interior." }
-            }
+            audio: "audios/evolucion_ciclo.mp3"
         }
     ]
 };
@@ -758,7 +726,7 @@ const baseDeDatos = {
 function cambiarIdioma(lang) {
     idiomaActual = lang;
     document.querySelectorAll('.flag-btn').forEach(b => b.classList.remove('active'));
-    event.currentTarget.classList.add('active');
+    if(event && event.currentTarget) event.currentTarget.classList.add('active');
     
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
@@ -787,58 +755,51 @@ function seleccionarCategoria(cat, mantenerVista = false) {
 
 function seleccionarBaraja(baraja, mantenerVista = false) {
     estadoActual.baraja = baraja;
-    const listaOptions = document.getElementById('options-list');
-    listaOptions.innerHTML = '';
+    if (!mantenerVista) {
+        poblarOpciones();
+        cambiarVista('view-options');
+    }
+}
 
-    const items = baseDeDatos[estadoActual.categoria] || baseDeDatos['bloqueos'];
-
-    items.forEach((item) => {
+function poblarOpciones() {
+    const contenedor = document.getElementById('options-list');
+    contenedor.innerHTML = '';
+    
+    const items = baseDeDatos[estadoActual.categoria] || [];
+    items.forEach((item, index) => {
+        const textoOpcion = item.texto[idiomaActual] || item.texto['es'];
         const btn = document.createElement('button');
-        btn.className = 'option-button';
-        btn.innerHTML = `<span class="title">${item.texto[idiomaActual] || item.texto['es']}</span><span class="arrow">&rarr;</span>`;
+        btn.className = 'menu-button';
+        btn.innerHTML = `<span class="title">${textoOpcion}</span><span class="arrow">&rarr;</span>`;
         btn.onclick = () => mostrarResultado(item);
-        listaOptions.appendChild(btn);
+        contenedor.appendChild(btn);
     });
-
-    if (!mantenerVista) cambiarVista('view-options');
 }
 
 function mostrarResultado(item) {
     itemSeleccionadoActual = item;
-    document.getElementById('active-deck-label').textContent = nombresBarajas[estadoActual.baraja][idiomaActual] || nombresBarajas[estadoActual.baraja]['es'];
+    
+    const labelBaraja = document.getElementById('active-deck-label');
+    if (nombresBarajas[estadoActual.baraja] && nombresBarajas[estadoActual.baraja][idiomaActual]) {
+        labelBaraja.textContent = nombresBarajas[estadoActual.baraja][idiomaActual];
+    }
+
     document.getElementById('res-friccion').textContent = item.friccion[idiomaActual] || item.friccion['es'];
     document.getElementById('res-nudo').textContent = item.nudo[idiomaActual] || item.nudo['es'];
     document.getElementById('res-accion').textContent = item.accion[idiomaActual] || item.accion['es'];
 
-    const audioElement = document.getElementById('audio-element');
     const audioSource = document.getElementById('audio-source');
+    const audioElement = document.getElementById('audio-element');
     audioSource.src = item.audio;
     audioElement.load();
 
-    const subtitleBox = document.getElementById('subtitle-box');
-    subtitleBox.textContent = traducciones[idiomaActual]['sub_espera'] || "Pulsa play para reproducir el mensaje en audio...";
+    document.getElementById('subtitle-box').innerHTML = `<span>${traducciones[idiomaActual]['sub_espera']}</span>`;
 
     cambiarVista('view-result');
 }
-
-// GESTIÓN DE SUBTÍTULOS DINÁMICOS AL REPRODUCIR EL AUDIO
-const audioElement = document.getElementById('audio-element');
-audioElement.addEventListener('timeupdate', () => {
-    if (!itemSeleccionadoActual || !itemSeleccionadoActual.subtitulos) return;
-    const subsIdioma = itemSeleccionadoActual.subtitulos[idiomaActual] || itemSeleccionadoActual.subtitulos['es'];
-    if (!subsIdioma) return;
-
-    const currentTime = audioElement.currentTime;
-    const tiempos = Object.keys(subsIdioma).map(Number).sort((a, b) => b - a);
-    
-    for (let t of tiempos) {
-        if (currentTime >= t) {
-            document.getElementById('subtitle-box').textContent = subsIdioma[t];
-            break;
-        }
-    }
-});
 </script>
 
 </body>
 </html>
+
+ 
