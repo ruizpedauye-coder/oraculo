@@ -1,5 +1,7 @@
 
-  <!DOCTYPE html>
+  
+  
+       <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -50,10 +52,12 @@ body {
   -webkit-backdrop-filter: blur(8px);
   border-radius: 16px;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
-  padding: 25px 22px;
+  padding: 25px 22px 75px 22px;
   border: 1px solid rgba(255, 255, 255, 0.4);
   position: relative;
   overflow: hidden;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .flag-selector-portada {
@@ -93,6 +97,7 @@ body.portada-activa .flag-selector-portada {
 body.portada-activa .app-container {
   max-width: 100vw;
   height: 100vh;
+  max-height: 100vh;
   border-radius: 0;
   border: none;
   background: transparent;
@@ -102,6 +107,7 @@ body.portada-activa .app-container {
   flex-direction: column;
   justify-content: flex-end;
   padding: 40px 25px;
+  overflow-y: visible;
 }
 
 #view-portada {
@@ -167,20 +173,20 @@ body.portada-activa .app-container {
 
 .header {
   text-align: center;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
 .menu-grid {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .menu-button, .option-button {
   background-color: rgba(244, 243, 240, 0.85);
   border: 1px solid var(--border-color);
   border-radius: 10px;
-  padding: 14px 18px;
+  padding: 12px 15px;
   text-align: left;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -196,7 +202,7 @@ body.portada-activa .app-container {
 }
 
 .menu-button span.title, .option-button span.title {
-  font-size: 0.92rem;
+  font-size: 0.9rem;
   font-weight: 500;
   color: var(--text-primary);
 }
@@ -209,19 +215,19 @@ body.portada-activa .app-container {
 .diagnosis-box {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .diagnostic-card {
   background-color: rgba(244, 243, 240, 0.85);
   border-radius: 8px;
-  padding: 10px 14px;
+  padding: 8px 12px;
   border-left: var(--box-border-left);
   border: 1px solid var(--border-color);
 }
 
 .diagnostic-card h3 {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.8px;
   color: var(--accent-color);
@@ -230,41 +236,41 @@ body.portada-activa .app-container {
 }
 
 .diagnostic-card p {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: var(--text-primary);
 }
 
 .audio-player-container {
   background-color: rgba(244, 243, 240, 0.85);
   border-radius: 8px;
-  padding: 10px 14px;
+  padding: 10px 12px;
   text-align: center;
   border: 1px solid var(--border-color);
-  margin-top: 5px;
+  margin-top: 4px;
 }
 
 .audio-player-container p {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--accent-color);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   font-weight: 600;
 }
 
 audio {
   width: 100%;
-  height: 36px;
+  height: 32px;
   outline: none;
 }
 
 .subtitle-box {
-  margin-top: 8px;
-  background-color: rgba(43, 43, 43, 0.9);
+  margin-top: 6px;
+  background-color: rgba(43, 43, 43, 0.95);
   color: #ffffff;
-  padding: 10px 12px;
+  padding: 8px 10px;
   border-radius: 6px;
-  font-size: 0.82rem;
-  line-height: 1.4;
-  min-height: 45px;
+  font-size: 0.8rem;
+  line-height: 1.3;
+  min-height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -279,7 +285,7 @@ audio {
   color: var(--text-secondary);
   font-size: 0.85rem;
   cursor: pointer;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -290,22 +296,22 @@ audio {
 }
 
 .btn-flotante-consulta {
-    position: fixed;
-    bottom: 15px;
+    position: absolute;
+    bottom: 12px;
     left: 50%;
     transform: translateX(-50%);
     background-color: var(--text-primary);
     color: #ffffff;
-    padding: 10px 18px;
-    border-radius: 30px;
+    padding: 8px 16px;
+    border-radius: 20px;
     text-decoration: none;
     font-weight: 500;
-    font-size: 0.85rem;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-    z-index: 10;
+    font-size: 0.8rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 20;
     display: none; 
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     white-space: nowrap;
 }
 
@@ -315,8 +321,8 @@ audio {
 
 .footer-note {
   text-align: center;
-  margin-top: 15px;
-  font-size: 0.75rem;
+  margin-top: 10px;
+  font-size: 0.72rem;
   color: var(--text-secondary);
 }
 
@@ -336,12 +342,12 @@ body.portada-activa .footer-note {
 
 <!-- SELECTOR DE BANDERAS FLOTANTE -->
 <div id="flag-selector" class="flag-selector-portada">
-    <button class="flag-btn active" onclick="cambiarIdioma('es')" title="Español">🇪🇸</button>
-    <button class="flag-btn" onclick="cambiarIdioma('en')" title="English">🇬🇧</button>
-    <button class="flag-btn" onclick="cambiarIdioma('fr')" title="Français">🇫🇷</button>
-    <button class="flag-btn" onclick="cambiarIdioma('de')" title="Deutsch">🇩🇪</button>
-    <button class="flag-btn" onclick="cambiarIdioma('it')" title="Italiano">🇮🇹</button>
-    <button class="flag-btn" onclick="cambiarIdioma('nl')" title="Nederlands">🇳🇱</button>
+    <button class="flag-btn active" onclick="cambiarIdioma('es', event)" title="Español">🇪🇸</button>
+    <button class="flag-btn" onclick="cambiarIdioma('en', event)" title="English">🇬🇧</button>
+    <button class="flag-btn" onclick="cambiarIdioma('fr', event)" title="Français">🇫🇷</button>
+    <button class="flag-btn" onclick="cambiarIdioma('de', event)" title="Deutsch">🇩🇪</button>
+    <button class="flag-btn" onclick="cambiarIdioma('it', event)" title="Italiano">🇮🇹</button>
+    <button class="flag-btn" onclick="cambiarIdioma('nl', event)" title="Nederlands">🇳🇱</button>
 </div>
 
 <div class="app-container">
@@ -393,7 +399,7 @@ body.portada-activa .footer-note {
     <div id="view-deck" class="view">
         <button class="back-button" onclick="cambiarVista('view-home')">&larr; <span data-i18n="volver">Volver</span></button>
         <div class="header">
-            <h1 style="font-weight: 600;" data-i18n="deck_titulo">Elige la perspectiva analítica para tu lectura.</h1>
+            <h1 style="font-weight: 600; font-size: 1rem;" data-i18n="deck_titulo">Elige la perspectiva analítica para tu lectura.</h1>
         </div>
         <div class="menu-grid">
             <button class="option-button" onclick="seleccionarBaraja('clasico')">
@@ -422,7 +428,7 @@ body.portada-activa .footer-note {
     <div id="view-options" class="view">
         <button class="back-button" onclick="cambiarVista('view-deck')">&larr; <span data-i18n="volver">Volver</span></button>
         <div class="header">
-            <h1 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;" data-i18n="options_titulo">¿Qué describe mejor tu estado actual?</h1>
+            <h1 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;" data-i18n="options_titulo">¿Qué describe mejor tu estado actual?</h1>
         </div>
         <div class="menu-grid" id="options-list"></div>
         <div class="footer-note" data-i18n="footer_texto">
@@ -433,8 +439,8 @@ body.portada-activa .footer-note {
     <!-- VISTA RESULTADO Y AUDIO -->
     <div id="view-result" class="view">
         <button class="back-button" onclick="cambiarVista('view-options')">&larr; <span data-i18n="volver">Volver</span></button>
-        <div class="header" style="margin-bottom: 8px;">
-            <h1 id="active-deck-label" style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary);"></h1>
+        <div class="header" style="margin-bottom: 6px;">
+            <h1 id="active-deck-label" style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary);"></h1>
         </div>
         <div class="diagnosis-box">
             <div class="diagnostic-card">
@@ -460,7 +466,7 @@ body.portada-activa .footer-note {
                 </div>
             </div>
         </div>
-        <div class="footer-note" data-i18n="footer_texto">
+        <div class="footer-note" data-i18n="footer_texto" style="margin-bottom: 25px;">
             Espacio de orientación y pausa consciente.
         </div>
     </div>
@@ -477,12 +483,11 @@ let estadoActual = { categoria: '', baraja: '' };
 let idiomaActual = 'es';
 let itemSeleccionadoActual = null;
 
-// ACTIVAR MÚSICA DE FONDO Y AUDIO AL HACER CLIC EN ENTRAR (GARANTIZADO POR NAVEGADORES)
 function entrarDesdePortada() {
     var musica = document.getElementById('bg-music');
     if (musica) {
         musica.volume = 0.07;
-        musica.play().catch(err => console.log("Audio de fondo bloqueado por políticas del navegador:", err));
+        musica.play().catch(err => console.log("Audio de fondo gestionado por políticas del navegador."));
     }
     document.body.classList.remove('portada-activa');
     cambiarVista('view-home');
@@ -490,7 +495,10 @@ function entrarDesdePortada() {
 
 function cambiarVista(vistaId) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    document.getElementById(vistaId).classList.add('active');
+    const targetView = document.getElementById(vistaId);
+    if (targetView) {
+        targetView.classList.add('active');
+    }
     
     const flagSelector = document.getElementById('flag-selector');
     const whatsappBtn = document.getElementById('whatsapp-btn');
@@ -743,10 +751,12 @@ const baseDeDatos = {
     ]
 };
 
-function cambiarIdioma(lang) {
+function cambiarIdioma(lang, ev) {
     idiomaActual = lang;
     document.querySelectorAll('.flag-btn').forEach(b => b.classList.remove('active'));
-    if(event && event.currentTarget) event.currentTarget.classList.add('active');
+    if(ev && ev.currentTarget) {
+        ev.currentTarget.classList.add('active');
+    }
     
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
@@ -778,6 +788,7 @@ function seleccionarBaraja(baraja) {
 
 function poblarOpciones() {
     const contenedor = document.getElementById('options-list');
+    if (!contenedor) return;
     contenedor.innerHTML = '';
     
     const items = baseDeDatos[estadoActual.categoria] || [];
@@ -795,35 +806,45 @@ function mostrarResultado(item) {
     itemSeleccionadoActual = item;
     
     const labelBaraja = document.getElementById('active-deck-label');
-    if (nombresBarajas[estadoActual.baraja] && nombresBarajas[estadoActual.baraja][idiomaActual]) {
+    if (labelBaraja && nombresBarajas[estadoActual.baraja] && nombresBarajas[estadoActual.baraja][idiomaActual]) {
         labelBaraja.textContent = nombresBarajas[estadoActual.baraja][idiomaActual];
     }
 
-    document.getElementById('res-friccion').textContent = item.friccion[idiomaActual] || item.friccion['es'];
-    document.getElementById('res-nudo').textContent = item.nudo[idiomaActual] || item.nudo['es'];
-    document.getElementById('res-accion').textContent = item.accion[idiomaActual] || item.accion['es'];
+    const friccionEl = document.getElementById('res-friccion');
+    const nudoEl = document.getElementById('res-nudo');
+    const accionEl = document.getElementById('res-accion');
+
+    if (friccionEl) friccionEl.textContent = item.friccion[idiomaActual] || item.friccion['es'];
+    if (nudoEl) nudoEl.textContent = item.nudo[idiomaActual] || item.nudo['es'];
+    if (accionEl) accionEl.textContent = item.accion[idiomaActual] || item.accion['es'];
 
     const audioSource = document.getElementById('audio-source');
     const audioElement = document.getElementById('audio-element');
-    audioSource.src = item.audio;
-    audioElement.load();
+    
+    if (audioSource && audioElement) {
+        audioSource.src = item.audio;
+        audioElement.load();
+    }
 
     const subtitleBox = document.getElementById('subtitle-box');
-    subtitleBox.innerHTML = `<span>${traducciones[idiomaActual]['sub_espera']}</span>`;
+    if (subtitleBox && traducciones[idiomaActual]) {
+        subtitleBox.innerHTML = `<span>${traducciones[idiomaActual]['sub_espera']}</span>`;
+    }
 
-    // LÓGICA DE SUBTÍTULOS DINÁMICOS AL REPRODUCIR EL AUDIO
-    audioElement.ontimeupdate = function() {
-        if (!item.subtitulos) return;
-        let currentTime = audioElement.currentTime;
-        let textoActivo = traducciones[idiomaActual]['sub_espera'];
-        
-        for (let i = 0; i < item.subtitulos.length; i++) {
-            if (currentTime >= item.subtitulos[i].tiempo) {
-                textoActivo = item.subtitulos[i].texto;
+    if (audioElement) {
+        audioElement.ontimeupdate = function() {
+            if (!item.subtitulos || !subtitleBox) return;
+            let currentTime = audioElement.currentTime;
+            let textoActivo = traducciones[idiomaActual] ? traducciones[idiomaActual]['sub_espera'] : "Reproduciendo...";
+            
+            for (let i = 0; i < item.subtitulos.length; i++) {
+                if (currentTime >= item.subtitulos[i].tiempo) {
+                    textoActivo = item.subtitulos[i].texto;
+                }
             }
-        }
-        subtitleBox.innerHTML = `<span>${textoActivo}</span>`;
-    };
+            subtitleBox.innerHTML = `<span>${textoActivo}</span>`;
+        };
+    }
 
     cambiarVista('view-result');
 }
@@ -831,4 +852,3 @@ function mostrarResultado(item) {
 
 </body>
 </html>
-       
