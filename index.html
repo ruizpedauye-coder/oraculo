@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orientación y Guía - Tonos Neutros</title>
+<style>
+:root {
+  --bg-color: rgba(255, 255, 255, 0.95);
+  --card-bg: rgba(255, 255, 255, 0.92);
+  --text-primary: #2b2b2b;
+  --text-secondary: #707070;
+  --accent-color: #635e59;    
+  --hover-bg: #eae8e4;
+  --border-color: #dcd9d4;
+  --box-border-left: 5px solid #635e59;
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family);
+}
+
+/* FONDO GLOBAL CON EL LOGO EN TODAS LAS VISTAS */
+body {
+  background-image: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.85)), url('logo.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: var(--text-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  line-height: 1.4;
+  overflow-x: hidden;
+}
+
+/* CONTENEDOR CENTRAL QUE SE ADAPTA EN TODAS LAS VISTAS */
+.app-container {
+  width: 100%;
+  max-width: 420px;
+  background-color: var(--card-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  padding: 25px 22px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+/* SELECTOR DE BANDERAS FLOTANTE (ESTRICTAMENTE PARA LA PORTADA) */
+.flag-selector-portada {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 30;
+  display: none;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 5px 8px;
+  border-radius: 20px;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+body.portada-activa .flag-selector-portada {
+  display: flex;
+}
+
+.flag-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 50%;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  opacity: 0.7;
+}
+
+.flag-btn:hover, .flag-btn.active {
+  transform: scale(1.2);
+  opacity: 1;
+}
+
+/* ADAPTACIÓN PARA LA PORTADA */
+body.portada-activa .app-container {
+  max-width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+  border: none;
+  background: transparent;
+  backdrop-filter: none;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 40px 25px;
+}
+
+#view-portada {
+    display: none;
+    flex-direction: column;
+    text-align: center;
+    width: 100%;
+    color: #ffffff;
+}
+
+#view-portada.active {
+    display: flex;
+}
+
+#view-portada h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #ffffff;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+}
+
+#view-portada p {
+    font-size: 0.95rem;
+    color: #f0f0f0;
+    line-height: 1.5;
+    margin-bottom: 25px;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+}
+
+.btn-portada-entrar {
+    justify-content: center;
+    background-color: #ffffff;
+    color: #2b2b2b;
+    font-weight: 600;
+    font-size: 1rem;
+    text-align: center;
+    border: none;
+    border-radius: 12px;
+    padding: 16px 20px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}
+
+.btn-portada-entrar:hover {
+    background-color: var(--hover-bg);
+}
+
+.view {
+  display: none;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.view.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#view-portada.view.active {
+  display: flex;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.header h1 {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.menu-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.menu-button, .option-button {
+  background-color: rgba(244, 243, 240, 0.85);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 14px 18px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.menu-button:hover, .option-button:hover {
+  border-color: var(--accent-color);
+  background-color: #ffffff;
+}
+
+.menu-button span.title, .option-button span.title {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.menu-button span.arrow, .option-button span.arrow {
+  color: var(--accent-color);
+  font-size: 1rem;
+}
+
+.diagnosis-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.diagnostic-card {
+  background-color: rgba(244, 243, 240, 0.85);
+  border-radius: 8px;
+  padding: 10px 14px;
+  border-left: var(--box-border-left);
+  border: 1px solid var(--border-color);
+}
+
+.diagnostic-card h3 {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--accent-color);
+  margin-bottom: 2px;
+  font-weight: 600;
+}
+
+.diagnostic-card p {
+  font-size: 0.85rem;
+  color: var(--text-primary);
+}
+
+.audio-player-container {
+  background-color: rgba(244, 243, 240, 0.85);
+  border-radius: 8px;
+  padding: 10px 14px;
+  text-align: center;
+  border: 1px solid var(--border-color);
+}
+
+.audio-player-container p {
+  font-size: 0.8rem;
+  color: var(--accent-color);
+  margin-bottom: 6px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+audio {
+  width: 100%;
+  height: 36px;
+  outline: none;
+}
+
+/* CAJA DE SUBTÍTULOS DINÁMICOS */
+.subtitle-box {
+  margin-top: 8px;
+  background-color: rgba(43, 43, 43, 0.9);
+  color: #ffffff;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  min-height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-style: italic;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.back-button:hover {
+  color: var(--text-primary);
+}
+
+/* BOTÓN FLOTANTE DE WHATSAPP */
+.btn-flotante-consulta {
+    position: fixed;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--text-primary);
+    color: #ffffff;
+    padding: 10px 18px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.85rem;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+    display: none; 
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+.btn-flotante-consulta:hover {
+    background-color: var(--accent-color);
+}
+
+.footer-note {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+body.portada-activa .footer-note {
+  color: #e0e0e0;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+</style>
+</head>
+<body class="portada-activa">
+
+<!-- MÚSICA DE FONDO AMBIENTAL AUTOMÁTICA -->
+<audio id="bg-music" loop autoplay muted>
+    <source src="audios/piano.mp3" type="audio/mpeg">
+    Tu navegador no soporta audio.
+</audio>
+
+<!-- SELECTOR DE BANDERAS FLOTANTE -->
+<div id="flag-selector" class="flag-selector-portada">
+    <button class="flag-btn active" onclick="cambiarIdioma('es')" title="Español">🇪🇸</button>
+    <button class="flag-btn" onclick="cambiarIdioma('en')" title="English">🇬🇧</button>
+    <button class="flag-btn" onclick="cambiarIdioma('fr')" title="Français">🇫🇷</button>
+    <button class="flag-btn" onclick="cambiarIdioma('de')" title="Deutsch">🇩🇪</button>
+    <button class="flag-btn" onclick="cambiarIdioma('it')" title="Italiano">🇮🇹</button>
+    <button class="flag-btn" onclick="cambiarIdioma('nl')" title="Nederlands">🇳🇱</button>
+</div>
+
+<div class="app-container">
+
+    <!-- PORTADA -->
+    <div id="view-portada" class="view active">
+        <div>
+            <h1 data-i18n="portada_titulo">Respuestas cuando la mente no se detiene</h1>
+            <p data-i18n="portada_sub">Un espacio de pausa y orientación intuitiva en audio para cada momento de incertidumbre.</p>
+            <button class="btn-portada-entrar" onclick="entrarDesdePortada()">
+                <span data-i18n="btn_iniciar">Iniciar consulta</span> &rarr;
+            </button>
+        </div>
+        <div class="footer-note" style="margin-top: 20px;" data-i18n="footer_texto">
+            Espacio de orientación y pausa consciente.
+        </div>
+    </div>
+
+    <!-- VISTA HOME -->
+    <div id="view-home" class="view">
+        <button class="back-button" onclick="cambiarVista('view-portada')">&larr; <span data-i18n="volver_portada">Volver a la portada</span></button>
+        <div class="header">
+            <h1 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;" data-i18n="home_titulo">¿Dónde necesitas claridad hoy?</h1>
+        </div>
+        <div class="menu-grid">
+            <button class="menu-button" onclick="seleccionarCategoria('bloqueos')">
+                <span class="title" data-i18n="cat_bloqueos">Bloqueos y Agotamiento</span>
+                <span class="arrow">&rarr;</span>
+            </button>
+            <button class="menu-button" onclick="seleccionarCategoria('amor')">
+                <span class="title" data-i18n="cat_amor">Amor y Vínculos</span>
+                <span class="arrow">&rarr;</span>
+            </button>
+            <button class="menu-button" onclick="seleccionarCategoria('trabajo')">
+                <span class="title" data-i18n="cat_trabajo">Trabajo y Abundancia</span>
+                <span class="arrow">&rarr;</span>
+            </button>
+            <button class="menu-button" onclick="seleccionarCategoria('evolucion')">
+                <span class="title" data-i18n="cat_evolucion">Evolución Personal</span>
+                <span class="arrow">&rarr;</span>
+            </button>
+        </div>
+        <div class="footer-note" data-i18n="footer_texto">
+            Espacio de orientación y pausa consciente.
+        </div>
+    </div>
+
+    <!-- VISTA BARAJA -->
+    <div id="view-deck" class="view">
+        <button class="back-button" onclick="cambiarVista('view-home')">&larr; <span data-i18n="volver">Volver</span></button>
+        <div class="header">
+            <h1 style="font-weight: 600;" data-i18n="deck_titulo">Elige la perspectiva analítica para tu lectura.</h1>
+        </div>
+        <div class="menu-grid">
+            <button class="option-button" onclick="seleccionarBaraja('clasico')">
+                <span class="title" data-i18n="deck_clasico">Tarot Clásico (Arquetípico)</span>
+                <span class="arrow">&rarr;</span>
+            </button>
+            <button class="option-button" onclick="seleccionarBaraja('espanola')">
+                <span class="title" data-i18n="deck_espanola">Baraja Española (Directa / Terrenal)</span>
+                <span class="arrow">&rarr;</span>
+            </button>
+            <button class="option-button" onclick="seleccionarBaraja('brujas')">
+                <span class="title" data-i18n="deck_brujas">Tarot de las Brujas / Hadas (Intuitivo)</span>
+                <span class="arrow">&rarr;</span>
+            </button>
+            <button class="option-button" onclick="seleccionarBaraja('vidas')">
+                <span class="title" data-i18n="deck_vidas">Oráculo de Vidas Pasadas (Kármico)</span>
+                <span class="arrow">&rarr;</span>
+            </button>
+        </div>
+        <div class="footer-note" data-i18n="footer_texto">
+            Espacio de orientación y pausa consciente.
+        </div>
+    </div>
+
+    <!-- VISTA OPCIONES ESPECÍFICAS -->
+    <div id="view-options" class="view">
+        <button class="back-button" onclick="cambiarVista('view-deck')">&larr; <span data-i18n="volver">Volver</span></button>
+        <div class="header">
+            <h1 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;" data-i18n="options_titulo">¿Qué describe mejor tu estado actual?</h1>
+        </div>
+        <div class="menu-grid" id="options-list"></div>
+        <div class="footer-note" data-i18n="footer_texto">
+            Espacio de orientación y pausa consciente.
+        </div>
+    </div>
+
+    <!-- VISTA RESULTADO Y AUDIO -->
+    <div id="view-result" class="view">
+        <button class="back-button" onclick="cambiarVista('view-options')">&larr; <span data-i18n="volver">Volver</span></button>
+        <div class="header" style="margin-bottom: 8px;">
+            <h1 id="active-deck-label" style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary);"></h1>
+        </div>
+        <div class="diagnosis-box">
+            <div class="diagnostic-card">
+                <h3 data-i18n="res_friccion_titulo">Punto de fricción</h3>
+                <p id="res-friccion">-</p>
+            </div>
+            <div class="diagnostic-card">
+                <h3 data-i18n="res_nudo_titulo">El nudo principal</h3>
+                <p id="res-nudo">-</p>
+            </div>
+            <div class="diagnostic-card">
+                <h3 data-i18n="res_accion_titulo">Brújula (Acción recomendada)</h3>
+                <p id="res-accion">-</p>
+            </div>
+            <div class="audio-player-container">
+                <p data-i18n="res_audio_titulo">🎧 Audio de orientación personal</p>
+                <audio controls preload="metadata" id="audio-element">
+                    <source src="" type="audio/mpeg" id="audio-source">
+                    Tu navegador no soporta el elemento de audio.
+                </audio>
+                <!-- CAJA DE SUBTÍTULOS DINÁMICOS -->
+                <div id="subtitle-box" class="subtitle-box">
+                    <span data-i18n="sub_espera">Pulsa play para reproducir el mensaje en audio...</span>
+                </div>
+            </div>
+        </div>
+        <div class="footer-note" data-i18n="footer_texto">
+            Espacio de orientación y pausa consciente.
+        </div>
+    </div>
+
+</div>
+
+<!-- BOTÓN FLOTANTE DE WHATSAPP -->
+<a href="https://wa.me/34XXXXXXXXX?text=Hola,%20me%20gustaría%20pedir%20información%20sobre%20una%20consulta%20personal." target="_blank" id="whatsapp-btn" class="btn-flotante-consulta">
+    <span>💬</span> <span data-i18n="btn_whatsapp">Pedir Consulta Personal</span>
+</a>
+
+<script>
+let estadoActual = { categoria: '', baraja: '' };
+let idiomaActual = 'es';
+let itemSeleccionadoActual = null;
+
+// SCRIPT PARA DESPERTAR EL AUDIO DE FONDO AL PRIMER CLIC (VOLUMEN 7%)
+document.addEventListener('click', function() {
+    var musica = document.getElementById('bg-music');
+    if (musica && musica.muted) {
+        musica.muted = false;
+        musica.volume = 0.07; // Volumen suave al 7%
+        musica.play().catch(function(error) {
+            console.log("Audio activado");
+        });
+    }
+}, { once: true });
+
+function entrarDesdePortada() {
+    document.body.classList.remove('portada-activa');
+    cambiarVista('view-home');
+}
+
+function cambiarVista(vistaId) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById(vistaId).classList.add('active');
+    
+    const flagSelector = document.getElementById('flag-selector');
+    const whatsappBtn = document.getElementById('whatsapp-btn');
+    
+    if (vistaId === 'view-portada') {
+        document.body.classList.add('portada-activa');
+        if(flagSelector) flagSelector.style.display = 'flex';
+        if(whatsappBtn) whatsappBtn.style.display = 'none';
+    } else {
+        document.body.classList.remove('portada-activa');
+        if(flagSelector) flagSelector.style.display = 'none';
+        if(whatsappBtn) whatsappBtn.style.display = 'flex';
+    }
+}
+
+const traducciones = {
+    es: {
+        portada_titulo: "Respuestas cuando la mente no se detiene",
+        portada_sub: "Un espacio de pausa y orientación intuitiva en audio para cada momento de incertidumbre.",
+        btn_iniciar: "Iniciar consulta",
+        footer_texto: "Espacio de orientación y pausa consciente.",
+        volver_portada: "Volver a la portada",
+        home_titulo: "¿Dónde necesitas claridad hoy?",
+        cat_bloqueos: "Bloqueos y Agotamiento",
+        cat_amor: "Amor y Vínculos",
+        cat_trabajo: "Trabajo y Abundancia",
+        cat_evolucion: "Evolución Personal",
+        volver: "Volver",
+        deck_titulo: "Elige la perspectiva analítica para tu lectura.",
+        deck_clasico: "Tarot Clásico (Arquetípico)",
+        deck_espanola: "Baraja Española (Directa / Terrenal)",
+        deck_brujas: "Tarot de las Brujas / Hadas (Intuitivo)",
+        deck_vidas: "Oráculo de Vidas Pasadas (Kármico)",
+        options_titulo: "¿Qué describe mejor tu estado actual?",
+        res_friccion_titulo: "Punto de fricción",
+        res_nudo_titulo: "El nudo principal",
+        res_accion_titulo: "Brújula (Acción recomendada)",
+        res_audio_titulo: "🎧 Audio de orientación personal",
+        sub_espera: "Pulsa play para reproducir el mensaje en audio...",
+        btn_whatsapp: "Pedir Consulta Personal",
+        whatsapp_msg: "Hola, me gustaría pedir información sobre una consulta personal."
+    },
+    en: {
+        portada_titulo: "Answers when the mind doesn't stop",
+        portada_sub: "A space for pause and intuitive audio guidance for every moment of uncertainty.",
+        btn_iniciar: "Start consultation",
+        footer_texto: "Space for conscious guidance and pause.",
+        volver_portada: "Back to cover",
+        home_titulo: "Where do you need clarity today?",
+        cat_bloqueos: "Blockages & Exhaustion",
+        cat_amor: "Love & Relationships",
+        cat_trabajo: "Work & Abundance",
+        cat_evolucion: "Personal Evolution",
+        volver: "Back",
+        deck_titulo: "Choose the analytical perspective for your reading.",
+        deck_clasico: "Classic Tarot (Archetypal)",
+        deck_espanola: "Spanish Deck (Direct / Earthy)",
+        deck_brujas: "Witches / Fairies Tarot (Intuitive)",
+        deck_vidas: "Past Lives Oracle (Karmic)",
+        options_titulo: "What best describes your current state?",
+        res_friccion_titulo: "Friction point",
+        res_nudo_titulo: "The main knot",
+        res_accion_titulo: "Compass (Recommended action)",
+        res_audio_titulo: "🎧 Personal guidance audio",
+        sub_espera: "Press play to listen to the audio message...",
+        btn_whatsapp: "Request Personal Consultation",
+        whatsapp_msg: "Hello, I would like to request information about a personal consultation."
+    },
+    fr: {
+        portada_titulo: "Des réponses quand l'esprit ne s'arrête pas",
+        portada_sub: "Un espace de pause et d'orientation intuitive en audio pour chaque moment d'incertitude.",
+        btn_iniciar: "Commencer la consultation",
+        footer_texto: "Espace d'orientation et de pause consciente.",
+        volver_portada: "Retour à l'accueil",
+        home_titulo: "Où avez-vous besoin de clarté aujourd'hui ?",
+        cat_bloqueos: "Blocages et Épuisement",
+        cat_amor: "Amour et Relations",
+        cat_trabajo: "Travail et Abondance",
+        cat_evolucion: "Évolution Personnelle",
+        volver: "Retour",
+        deck_titulo: "Choisissez la perspective analytique pour votre tirage.",
+        deck_clasico: "Tarot Classique (Archétypal)",
+        deck_espanola: "Jeu Espagnol (Direct / Terrien)",
+        deck_brujas: "Tarot des Sorcières / Fées (Intuitif)",
+        deck_vidas: "Oracle des Vies Antérieures (Karmique)",
+        options_titulo: "Qu'est-ce qui décrit le mieux votre état actuel ?",
+        res_friccion_titulo: "Point de friction",
+        res_nudo_titulo: "Le nœud principal",
+        res_accion_titulo: "Boussole (Action recommandée)",
+        res_audio_titulo: "🎧 Audio d'orientation personnelle",
+        sub_espera: "Appuyez sur lecture pour écouter le message audio...",
+        btn_whatsapp: "Demander une consultation",
+        whatsapp_msg: "Bonjour, j'aimerais demander des informations sur une consultation personnelle."
+    },
+    de: {
+        portada_titulo: "Antworten, wenn der Geist nicht zur Ruhe kommt",
+        portada_sub: "Ein Raum für Innehalten und intuitive Audio-Führung für jeden Moment der Ungewissheit.",
+        btn_iniciar: "Beratung starten",
+        footer_texto: "Raum für bewusste Orientierung und Innehalten.",
+        volver_portada: "Zurück zum Start",
+        home_titulo: "Wo brauchst du heute Klarheit?",
+        cat_bloqueos: "Blockaden & Erschöpfung",
+        cat_amor: "Liebe & Beziehungen",
+        cat_trabajo: "Arbeit & Fülle",
+        cat_evolucion: "Persönliche Entwicklung",
+        volver: "Zurück",
+        deck_titulo: "Wähle die analytische Perspektive für deine Legung.",
+        deck_clasico: "Klassisches Tarot (Archetypisch)",
+        deck_espanola: "Spanisches Blatt (Direkt / Erde)",
+        deck_brujas: "Hexen / Feen Tarot (Intuitiv)",
+        deck_vidas: "Orakel der früheren Leben (Karmisch)",
+        options_titulo: "Was beschreibt deinen aktuellen Zustand am besten?",
+        res_friccion_titulo: "Reibungspunkt",
+        res_nudo_titulo: "Der Hauptknoten",
+        res_accion_titulo: "Kompass (Empfohlene Handlung)",
+        res_audio_titulo: "🎧 Persönliches Orientierungs-Audio",
+        sub_espera: "Drücke auf Play, um die Audiobotschaft anzuhören...",
+        btn_whatsapp: "Persönliche Beratung anfragen",
+        whatsapp_msg: "Hallo, ich möchte gerne Informationen über eine persönliche Beratung anfordern."
+    },
+    it: {
+        portada_titulo: "Risposte quando la mente non si ferma",
+        portada_sub: "Uno spazio di pausa e orientamento intuitivo in audio per ogni momento di incertezza.",
+        btn_iniciar: "Inizia consultazione",
+        footer_texto: "Spazio di orientamento e pausa cosciente.",
+        volver_portada: "Torna alla copertina",
+        home_titulo: "Dove hai bisogno di chiarezza oggi?",
+        cat_bloqueos: "Blocchi e Esaurimento",
+        cat_amor: "Amore e Legami",
+        cat_trabajo: "Lavoro e Abbondanza",
+        cat_evolucion: "Evoluzione Personale",
+        volver: "Indietro",
+        deck_titulo: "Scegli la prospettiva analitica per la tua lettura.",
+        deck_clasico: "Tarocchi Classici (Archetipici)",
+        deck_espanola: "Mazzo Spagnolo (Diretto / Terreno)",
+        deck_brujas: "Tarocchi delle Streghe / Fate (Intuitivo)",
+        deck_vidas: "Oracolo delle Vite Passate (Karmico)",
+        options_titulo: "Cosa descrive meglio il tuo stato attuale?",
+        res_friccion_titulo: "Punto di attrito",
+        res_nudo_titulo: "Il nodo principale",
+        res_accion_titulo: "Bussola (Azione consigliata)",
+        res_audio_titulo: "🎧 Audio di orientamento personale",
+        sub_espera: "Premi play per ascoltare il messaggio audio...",
+        btn_whatsapp: "Richiedi Consulto Personale",
+        whatsapp_msg: "Salve, vorrei informazioni per un consulto personale."
+    },
+    nl: {
+        portada_titulo: "Antwoorden wanneer de geest niet stopt",
+        portada_sub: "Een ruimte voor pauze en intuïtive audiobegeleiding voor elk moment van onzekerheid.",
+        btn_iniciar: "Start consult",
+        footer_texto: "Ruimte voor bewuste oriëntatie en pauze.",
+        volver_portada: "Terug naar omslag",
+        home_titulo: "Waar heb je vandaag helderheid nodig?",
+        cat_bloqueos: "Blokkades & Uitputting",
+        cat_amor: "Liefde & Relaties",
+        cat_trabajo: "Werk & Overvloed",
+        cat_evolucion: "Persoonlijke Evolutie",
+        volver: "Terug",
+        deck_titulo: "Kies het analytische perspectief voor je legging.",
+        deck_clasico: "Klassieke Tarot (Archetypisch)",
+        deck_espanola: "Spaanse Set (Direct / Aards)",
+        deck_brujas: "Heksen / Feeën Tarot (Intuïtief)",
+        deck_vidas: "Orakel van Vorige Levens (Karmisch)",
+        options_titulo: "Wat beschrijft je huidige staat het best?",
+        res_friccion_titulo: "Wrijvingspunt",
+        res_nudo_titulo: "De hoofdknoop",
+        res_accion_titulo: "Kompas (Aanbevolen actie)",
+        res_audio_titulo: "🎧 Persoonlijke oriëntatie-audio",
+        sub_espera: "Druk op afspelen om naar het audiobericht te luisteren...",
+        btn_whatsapp: "Persoonlijk Consult Aanvragen",
+        whatsapp_msg: "Hallo, ik wil graag informatie aanvragen over een persoonlijk consult."
+    }
+};
+
+const nombresBarajas = {
+    clasico: { es: "Tarot Clásico (Arquetípico)", en: "Classic Tarot (Archetypal)", fr: "Tarot Classique (Archétypal)", de: "Klassisches Tarot (Archetypisch)", it: "Tarocchi Classici (Archetipici)", nl: "Klassieke Tarot (Archetypisch)" },
+    espanola: { es: "Baraja Española (Directa / Terrenal)", en: "Spanish Deck (Direct / Earthy)", fr: "Jeu Espagnol (Direct / Terrien)", de: "Spanisches Blatt (Direkt / Erde)", it: "Mazzo Spagnolo (Diretto / Terreno)", nl: "Spaanse Set (Direct / Aards)" },
+    brujas: { es: "Tarot de las Brujas / Hadas (Intuitivo)", en: "Witches / Fairies Tarot (Intuitive)", fr: "Tarot des Sorcières / Fées (Intuitif)", de: "Hexen / Feen Tarot (Intuitiv)", it: "Tarocchi delle Streghe / Fate (Intuitivo)", nl: "Heksen / Feeën Tarot (Intuïtief)" },
+    vidas: { es: "Oráculo de Vidas Pasadas (Kármico)", en: "Past Lives Oracle (Karmic)", fr: "Oracle des Vies Antérieures (Karmique)", de: "Orakel der früheren Leben (Karmisch)", it: "Oracolo delle Vite Passate (Karmico)", nl: "Orakel van Vorige Levens (Karmisch)" }
+};
+
+const baseDeDatos = {
+    bloqueos: [
+        { 
+            texto: { es: "Siento la mente estancada y no avanzo.", en: "I feel my mind is stuck and I'm not moving forward.", fr: "Je sens que mon esprit est bloqué et je n'avance pas.", de: "Ich fühle, dass mein Geist feststeckt und ich nicht vorankomme.", it: "Sento la mente bloccata e non vado avanti.", nl: "Ik voel dat mijn geest vastzit en ik kom niet vooruit." },
+            friccion: { es: "Estás intentando procesar demasiadas cosas a la vez con un nivel de energía bajo mínimos.", en: "You are trying to process too many things at once with minimal energy levels.", fr: "Vous essayez de traiter trop de choses à la fois avec un niveau d'énergie au plus bas.", de: "Du versuchst, zu viele Dinge gleichzeitig zu verarbeiten, mit minimaler Energie.", it: "Stai cercando di elaborare troppe cose insieme con un livello di energia al minimo.", nl: "Je probeert te veel tegelijk te verwerken met een minimaal energieniveau." },
+            nudo: { es: "La autoexigencia constante por querer controlar lo que pasará mañana.", en: "Constant self-demand to control what will happen tomorrow.", fr: "L'exigence constante de vouloir contrôler ce qui se passera demain.", de: "Der ständige Leistungsdruck, alles kontrollieren zu wollen, was morgen passiert.", it: "La costante autoesigenza di voler controllare cosa accadrà domani.", nl: "De constante zelfoplegging om te willen controleren wat er morgen gebeurt." },
+            accion: { es: "Hoy queda prohibido tomar decisiones drásticas. Elige una tarea pequeña y descansa.", en: "Today, making drastic decisions is forbidden. Choose one small task and rest.", fr: "Aujourd'hui, il est interdit de prendre des décisions drastiques. Choisissez une petite tâche et reposez-vous.", de: "Heute ist es verboten, drastische Entscheidungen zu treffen. Wähle eine kleine Aufgabe und ruhe dich aus.", it: "Oggi è vietato prendere decisioni drastiche. Scegli un piccolo compito e riposati.", nl: "Vandaag is het verboden drastische beslissingen te nemen. Kies één kleine taak en rust uit." },
+            audio: "audios/bloqueo_mental.mp3",
+            subtitulos: {
+                es: { 0: "Hola.", 1: "Cuando sientes ese atasco mental, por experiencia te digo que no es falta de capacidad, sino agotamiento.", 8: "Estás intentando procesar demasiados frentes abiertos con la energía bajo mínimos.", 14: "Tu mente pide una tregua.", 16: "Hoy no intentes resolverlo todo; baja el ritmo, elige una sola cosa pequeña que puedas hacer y suelta el resto.", 24: "Date permiso para respirar." }
+            }
+        },
+        { 
+            texto: { es: "Hay una situación externa que frena por completo.", en: "There is an external situation that completely halts progress.", fr: "Il y a une situation externe qui freine complètement.", de: "Es gibt eine äußere Situation, die alles komplett ausbremst.", it: "C'è una situazione esterna che frena completamente.", nl: "Er is een externe situatie die alles volledig afremt." },
+            friccion: { es: "Te estás desgastando intentando mover una rueda que depende de factores ajenos.", en: "You are wearing yourself out trying to turn a wheel that depends on external factors.", fr: "Vous vous épuisez à essayer de faire tourner une roue qui dépend de facteurs extérieurs.", de: "Du reibst dich auf, ein Rad zu drehen, das von äußeren Faktoren abhängt.", it: "Ti stai logorando cercando di muovere una ruota che dipende da fattori esterni.", nl: "Je put jezelf uit door te proberen een wiel te draaien dat afhangt van externe factoren." },
+            nudo: { es: "Resistencia a aceptar los tiempos y los imprevistos duros del entorno.", en: "Resistance to accept the timing and harsh unexpected events of the environment.", fr: "Résistance à accepter les temps et les imprévus durs de l'environnement.", de: "Widerstand gegen die Annahme von Zeiten und harten unvorhergesehenen Ereignissen.", it: "Resistenza ad accettare i tempi e gli imprevisti duri dell'ambiente.", nl: "Weerstand tegen het accepteren van de timing en harde onvoorziene gebeurtenissen." },
+            accion: { es: "Pon el foco únicamente en tu metro cuadrado. Lo demás se reordenará solo.", en: "Focus solely on your square meter. Everything else will rearrange itself.", fr: "Concentrez-vous uniquement sur votre mètre carré. Le reste se réorganisera tout seul.", de: "Konzentriere dich nur auf deinen eigenen Bereich. Der Rest ordnet sich von selbst.", it: "Concentrati solo sul tuo metro quadro. Il resto si riordinerà da solo.", nl: "Focus je uitsluitend op je eigen cirkel. De rest ordent zich vanzelf." },
+            audio: "audios/bloqueo_externo.mp3",
+            subtitulos: {
+                es: { 0: "Comprendo.", 2: "Cuando el freno viene de fuera, el desgaste se multiplica porque luchas contra corriente.", 9: "Estás intentando mover una rueda que no depende de ti.", 15: "Suelta el control de lo externo y céntrate en tu metro cuadrado.", 22: "Lo demás encontrará su propio cauce a su debido tiempo." }
+            }
+        }
+    ],
+    amor: [
+        { 
+            texto: { es: "Siento distancia o desconexión en el vínculo.", en: "I feel distance or disconnection in the bond.", fr: "Je ressens de la distance ou une déconnexion dans le lien.", de: "Ich spüre Distanz oder Trennung in der Verbindung.", it: "Sento distanza o disconnessione nel legame.", nl: "Ik voel afstand of ontkoppeling in de band." },
+            friccion: { es: "Expectativas no expresadas que generan fricción silenciosa.", en: "Unexpressed expectations generating silent friction.", fr: "Attentes non exprimées générant une friction silencieuse.", de: "Nicht ausgesprochene Erwartungen erzeugen stille Reibung.", it: "Aspettative non espresse che generano attrito silenzioso.", nl: "Niet-uitgesproken verwachtingen die stille wrijving veroorzaken." },
+            nudo: { es: "Miedo a mostrar vulnerabilidad real por temor al rechazo.", en: "Fear of showing real vulnerability due to fear of rejection.", fr: "Peur de montrer une vraie vulnérabilité par peur du rejet.", de: "Angst, echte Verletzlichkeit zu zeigen aus Furcht vor Ablehnung.", it: "Paura di mostrare vera vulnerabilità per timore del rifiuto.", nl: "Angst om echte kwetsbaarheid te tonen uit angst voor afwijzing." },
+            accion: { es: "Habla desde tu sentir íntimo sin reclamar ni culpar.", en: "Speak from your intimate feeling without demanding or blaming.", fr: "Parlez depuis votre ressenti intime sans réclamer ni blâmer.", de: "Sprich aus deinem inneren Gefühl, ohne Vorwürfe oder Forderungen.", it: "Parla dal tuo sentire intimo senza pretendere o colpevolizzare.", nl: "Spreek vanuit je diepste gevoel zonder te eisen of de schuld te geven." },
+            audio: "audios/amor_distancia.mp3",
+            subtitulos: {
+                es: { 0: "Escucha.", 2: "En los vínculos, la distancia física suele ser un reflejo de la distancia emocional o del silencio acumulado.", 10: "No busques culpables; busca expresar lo que sientes desde la calma.", 18: "Una palabra honesta y vulnerable vale más que mil reproches." }
+            }
+        }
+    ],
+    trabajo: [
+        { 
+            texto: { es: "Incertidumbre o falta de rumbo profesional.", en: "Uncertainty or lack of professional direction.", fr: "Incertitude ou manque de direction professionnelle.", de: "Ungewissheit oder fehlende berufliche Richtung.", it: "Incertezza o mancanza di direzione professionale.", nl: "Onzekerheid of gebrek aan professionele richting." },
+            friccion: { es: "Estás en una encrucijada donde el modelo antiguo ya no encaja.", en: "You are at a crossroads where the old model no longer fits.", fr: "Vous êtes à la croisée des chemins où l'ancien modèle ne correspond plus.", de: "Du stehst an einem Scheideweg, an dem das alte Modell nicht mehr passt.", it: "Ti trovi a un bivio in cui il vecchio modello non calza più.", nl: "Je staat op een kruispunt waar het oude model niet meer past." },
+            nudo: { es: "Miedo al salto al vacío o a perder la falsa estabilidad.", en: "Fear of the leap into the void or losing false stability.", fr: "Peur du saut dans le vide ou de perdre une fausse stabilité.", de: "Angst vor dem Sprung ins Leere oder dem Verlust falscher Stabilität.", it: "Paura del salto nel vuoto o di perdere una falsa stabilità.", nl: "Angst voor de sprong in het duister of het verliezen van valse stabiliteit." },
+            accion: { es: "Define tus líneas rojas y empieza a mover hilos en silencio.", en: "Define your red lines and start moving strings in silence.", fr: "Définissez vos lignes rouges et commencez à bouger les fils en silence.", de: "Definiere deine roten Linien und ziehe im Stillen die Fäden.", it: "Definisci le tue linee rosse e inizia a muovere i fili in silenzio.", nl: "Bepaal je rode lijnen en begin in stilte aan de touwtjes te trekken." },
+            audio: "audios/trabajo_rumbo.mp3",
+            subtitulos: {
+                es: { 0: "Atención.", 2: "Cuando el rumbo profesional tambalea, la vida te está pidiendo revisar tus auténticos valores.", 10: "No te aferres a estructuras que ya se han quedado pequeñas.", 17: "Define qué es lo que de verdad quieres construir y da un paso pequeño pero firme." }
+            }
+        }
+    ],
+    evolucion: [
+        { 
+            texto: { es: "Siento que estoy cerrando una etapa muy pesada.", en: "I feel I am closing a very heavy stage.", fr: "Je sens que je ferme une étape très lourde.", de: "Ich habe das Gefühl, eine sehr schwere Phase abzuschließen.", it: "Sento che sto chiudendo una fase molto pesante.", nl: "Ik voel dat ik een zeer zware fase afsluit." },
+            friccion: { es: "El duelo de dejar atrás lo conocido aunque ya no te aporte vida.", en: "The grief of leaving behind the known even if it no longer brings life.", fr: "Le deuil de laisser derrière soi le connu même s'il ne vous apporte plus de vie.", de: "Die Trauer, das Bekannte hinter sich zu lassen, auch wenn es kein Leben mehr bringt.", it: "Il lutto di lasciarsi alle spalle il noto anche se non ti dà più vita.", nl: "De rouw om het bekende achter te laten, zelfs als het geen leven meer brengt." },
+            nudo: { es: "Sensación de vacío intermedio entre lo viejo y lo nuevo.", en: "Feeling of intermediate emptiness between the old and the new.", fr: "Sentiment de vide intermédiaire entre l'ancien et le nouveau.", de: "Gefühl der Leere zwischen dem Alten und dem Neuen.", it: "Sensazione di vuoto intermedio tra il vecchio e il nuovo.", nl: "Gevoel van leegte tussen het oude en het nieuwe." },
+            accion: { es: "Abraza el vacío. No corras a llenarlo con distracciones.", en: "Embrace the void. Don't rush to fill it with distractions.", fr: "Embrassez le vide. Ne vous précipitez pas pour le remplir.", de: "Umarme die Leere. Eile nicht, sie mit Ablenkungen zu füllen.", it: "Abbraccia il vuoto. Non correre a riempirlo con distrazioni.", nl: "Omarm de leegte. Haast je niet om deze te vullen." },
+            audio: "audios/evolucion_etapa.mp3",
+            subtitulos: {
+                es: { 0: "Escucha con calma.", 3: "Toda transición exige atravesar un espacio de vacío donde lo viejo ya no está y lo nuevo aún no ha nacido.", 12: "No tengas prisa por llenar ese hueco.", 16: "Este es un tiempo sagrado de regeneración interior." }
+            }
+        }
+    ]
+};
+
+function cambiarIdioma(lang) {
+    idiomaActual = lang;
+    document.querySelectorAll('.flag-btn').forEach(b => b.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+    
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (traducciones[lang] && traducciones[lang][key]) {
+            el.textContent = traducciones[lang][key];
+        }
+    });
+
+    const whatsappBtn = document.getElementById('whatsapp-btn');
+    if (whatsappBtn && traducciones[lang]['whatsapp_msg']) {
+        whatsappBtn.href = `https://wa.me/34614341782?text=${encodeURIComponent(traducciones[lang]['whatsapp_msg'])}`;
+    }
+
+    if (estadoActual.categoria) {
+        seleccionarCategoria(estadoActual.categoria, true);
+    }
+    if (estadoActual.baraja) {
+        seleccionarBaraja(estadoActual.baraja, true);
+    }
+}
+
+function seleccionarCategoria(cat, mantenerVista = false) {
+    estadoActual.categoria = cat;
+    if (!mantenerVista) cambiarVista('view-deck');
+}
+
+function seleccionarBaraja(baraja, mantenerVista = false) {
+    estadoActual.baraja = baraja;
+    const listaOptions = document.getElementById('options-list');
+    listaOptions.innerHTML = '';
+
+    const items = baseDeDatos[estadoActual.categoria] || baseDeDatos['bloqueos'];
+
+    items.forEach((item) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-button';
+        btn.innerHTML = `<span class="title">${item.texto[idiomaActual] || item.texto['es']}</span><span class="arrow">&rarr;</span>`;
+        btn.onclick = () => mostrarResultado(item);
+        listaOptions.appendChild(btn);
+    });
+
+    if (!mantenerVista) cambiarVista('view-options');
+}
+
+function mostrarResultado(item) {
+    itemSeleccionadoActual = item;
+    document.getElementById('active-deck-label').textContent = nombresBarajas[estadoActual.baraja][idiomaActual] || nombresBarajas[estadoActual.baraja]['es'];
+    document.getElementById('res-friccion').textContent = item.friccion[idiomaActual] || item.friccion['es'];
+    document.getElementById('res-nudo').textContent = item.nudo[idiomaActual] || item.nudo['es'];
+    document.getElementById('res-accion').textContent = item.accion[idiomaActual] || item.accion['es'];
+
+    const audioElement = document.getElementById('audio-element');
+    const audioSource = document.getElementById('audio-source');
+    audioSource.src = item.audio;
+    audioElement.load();
+
+    const subtitleBox = document.getElementById('subtitle-box');
+    subtitleBox.textContent = traducciones[idiomaActual]['sub_espera'] || "Pulsa play para reproducir el mensaje en audio...";
+
+    cambiarVista('view-result');
+}
+
+// GESTIÓN DE SUBTÍTULOS DINÁMICOS AL REPRODUCIR EL AUDIO
+const audioElement = document.getElementById('audio-element');
+audioElement.addEventListener('timeupdate', () => {
+    if (!itemSeleccionadoActual || !itemSeleccionadoActual.subtitulos) return;
+    const subsIdioma = itemSeleccionadoActual.subtitulos[idiomaActual] || itemSeleccionadoActual.subtitulos['es'];
+    if (!subsIdioma) return;
+
+    const currentTime = audioElement.currentTime;
+    const tiempos = Object.keys(subsIdioma).map(Number).sort((a, b) => b - a);
+    
+    for (let t of tiempos) {
+        if (currentTime >= t) {
+            document.getElementById('subtitle-box').textContent = subsIdioma[t];
+            break;
+        }
+    }
+});
+</script>
+
+</body>
+</html>
