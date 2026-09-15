@@ -1,846 +1,515 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Orientación y Guía - Tonos Neutros</title>
-<style>
-:root {
-  --bg-color: rgba(255, 255, 255, 0.95);
-  --card-bg: rgba(255, 255, 255, 0.92);
-  --text-primary: #2b2b2b;
-  --text-secondary: #707070;
-  --accent-color: #635e59;    
-  --hover-bg: #eae8e4;
-  --border-color: #dcd9d4;
-  --box-border-left: 5px solid #635e59;
-  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Oráculo y Orientación</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-color: #6366f1;
+            --accent-hover: #4f46e5;
+            --border-color: #334155;
+        }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: var(--font-family);
-}
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
 
-body {
-  background-image: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.85)), url('logo.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  color: var(--text-primary);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
-  line-height: 1.4;
-  overflow-x: hidden;
-}
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 600px;
+        }
 
-.app-container {
-  width: 100%;
-  max-width: 420px;
-  background-color: var(--card-bg);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-radius: 16px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
-  padding: 25px 22px 75px 22px;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  position: relative;
-  overflow: hidden;
-  max-height: 90vh;
-  overflow-y: auto;
-}
+        .view {
+            display: none;
+            padding: 24px;
+            flex-direction: column;
+            flex-grow: 1;
+            box-sizing: border-box;
+            animation: fadeIn 0.3s ease-in-out;
+        }
 
-.flag-selector-portada {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  z-index: 30;
-  display: none;
-  gap: 6px;
-  background: rgba(0, 0, 0, 0.4);
-  padding: 5px 8px;
-  border-radius: 20px;
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
+        .view.active {
+            display: flex;
+        }
 
-body.portada-activa .flag-selector-portada {
-  display: flex;
-}
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-.flag-btn {
-  background: transparent;
-  border: none;
-  font-size: 1.1rem;
-  cursor: pointer;
-  padding: 2px;
-  border-radius: 50%;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-  opacity: 0.7;
-}
+        /* Selector de Idiomas */
+        .language-selector {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
 
-.flag-btn:hover, .flag-btn.active {
-  transform: scale(1.2);
-  opacity: 1;
-}
+        .flag-btn {
+            background: transparent;
+            border: 2px solid transparent;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 2px;
+            transition: transform 0.2s;
+        }
 
-body.portada-activa .app-container {
-  max-width: 100vw;
-  height: 100vh;
-  max-height: 100vh;
-  border-radius: 0;
-  border: none;
-  background: transparent;
-  backdrop-filter: none;
-  box-shadow: none;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 40px 25px;
-  overflow-y: visible;
-}
+        .flag-btn.active {
+            border-color: var(--accent-color);
+            transform: scale(1.1);
+        }
 
-#view-portada {
-    display: none;
-    flex-direction: column;
-    text-align: center;
-    width: 100%;
-    color: #ffffff;
-}
+        /* Estilos Portada */
+        .portada-content {
+            text-align: center;
+            margin: auto 0;
+        }
 
-#view-portada.active {
-    display: flex;
-}
+        .portada-content h1 {
+            font-size: 1.8rem;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
 
-#view-portada h1 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 10px;
-    color: #ffffff;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.8);
-}
+        .portada-content p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 32px;
+            line-height: 1.5;
+        }
 
-#view-portada p {
-    font-size: 0.95rem;
-    color: #f0f0f0;
-    line-height: 1.5;
-    margin-bottom: 25px;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.8);
-}
+        /* Botones generales */
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            width: 100%;
+        }
 
-.btn-portada-entrar {
-    justify-content: center;
-    background-color: #ffffff;
-    color: #2b2b2b;
-    font-weight: 600;
-    font-size: 1rem;
-    text-align: center;
-    border: none;
-    border-radius: 12px;
-    padding: 16px 20px;
-    cursor: pointer;
-    width: 100%;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-}
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+        }
 
-.btn-portada-entrar:hover {
-    background-color: var(--hover-bg);
-}
+        .btn-back {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.9rem;
+            align-self: flex-start;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-back:hover {
+            color: var(--text-primary);
+        }
 
-.view {
-  display: none;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
+        /* Listas de Opciones y Barajas */
+        h2 {
+            font-size: 1.3rem;
+            margin-top: 0;
+            margin-bottom: 16px;
+        }
 
-.view.active {
-  display: block;
-  opacity: 1;
-  transform: translateY(0);
-}
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
+            max-height: 420px;
+            padding-right: 4px;
+        }
 
-.header {
-  text-align: center;
-  margin-bottom: 12px;
-}
+        .option-button {
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            padding: 14px 16px;
+            border-radius: 10px;
+            color: var(--text-primary);
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
 
-.menu-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
+        .option-button:hover {
+            background-color: rgba(99, 102, 241, 0.1);
+            border-color: var(--accent-color);
+        }
 
-.menu-button, .option-button {
-  background-color: rgba(244, 243, 240, 0.85);
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  padding: 12px 15px;
-  text-align: left;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-}
+        .option-button .arrow {
+            color: var(--text-secondary);
+        }
 
-.menu-button:hover, .option-button:hover {
-  border-color: var(--accent-color);
-  background-color: #ffffff;
-}
+        /* Vista de Resultados */
+        .result-card {
+            background-color: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
 
-.menu-button span.title, .option-button span.title {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--text-primary);
-}
+        .result-card h3 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: var(--accent-color);
+            margin: 0 0 6px 0;
+            letter-spacing: 0.5px;
+        }
 
-.menu-button span.arrow, .option-button span.arrow {
-  color: var(--accent-color);
-  font-size: 1rem;
-}
+        .result-card p {
+            margin: 0;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            color: var(--text-primary);
+        }
 
-.diagnosis-box {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
+        /* Reproductor y Subtítulos */
+        .audio-container {
+            margin-top: auto;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
 
-.diagnostic-card {
-  background-color: rgba(244, 243, 240, 0.85);
-  border-radius: 8px;
-  padding: 8px 12px;
-  border-left: var(--box-border-left);
-  border: 1px solid var(--border-color);
-}
+        audio {
+            width: 100%;
+            height: 36px;
+            margin-bottom: 8px;
+        }
 
-.diagnostic-card h3 {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: var(--accent-color);
-  margin-bottom: 2px;
-  font-weight: 600;
-}
-
-.diagnostic-card p {
-  font-size: 0.82rem;
-  color: var(--text-primary);
-}
-
-.audio-player-container {
-  background-color: rgba(244, 243, 240, 0.85);
-  border-radius: 8px;
-  padding: 10px 12px;
-  text-align: center;
-  border: 1px solid var(--border-color);
-  margin-top: 4px;
-}
-
-.audio-player-container p {
-  font-size: 0.78rem;
-  color: var(--accent-color);
-  margin-bottom: 4px;
-  font-weight: 600;
-}
-
-audio {
-  width: 100%;
-  height: 32px;
-  outline: none;
-}
-
-.subtitle-box {
-  margin-top: 6px;
-  background-color: rgba(43, 43, 43, 0.95);
-  color: #ffffff;
-  padding: 8px 10px;
-  border-radius: 6px;
-  font-size: 0.8rem;
-  line-height: 1.3;
-  min-height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  font-style: italic;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.back-button {
-  background: none;
-  border: none;
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-  cursor: pointer;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.back-button:hover {
-  color: var(--text-primary);
-}
-
-.btn-flotante-consulta {
-    position: absolute;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--text-primary);
-    color: #ffffff;
-    padding: 8px 16px;
-    border-radius: 20px;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 0.8rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    z-index: 20;
-    display: none; 
-    align-items: center;
-    gap: 6px;
-    white-space: nowrap;
-}
-
-.btn-flotante-consulta:hover {
-    background-color: var(--accent-color);
-}
-
-.footer-note {
-  text-align: center;
-  margin-top: 10px;
-  font-size: 0.72rem;
-  color: var(--text-secondary);
-}
-
-body.portada-activa .footer-note {
-  color: #e0e0e0;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-}
-</style>
+        .subtitle-box {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-align: center;
+            min-height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-style: italic;
+        }
+    </style>
 </head>
-<body class="portada-activa">
+<body>
 
-<!-- MÚSICA DE FONDO AMBIENTAL -->
-<audio id="bg-music" loop>
-    <source src="audios/piano.mp3" type="audio/mpeg">
-    Tu navegador no soporta audio.
-</audio>
+    <div class="container">
+        
+        <!-- VISTA 1: PORTADA -->
+        <div id="view-portada" class="view active">
+            <div class="language-selector">
+                <button class="flag-btn active" onclick="cambiarIdioma('es', event)">🇪🇸</button>
+                <button class="flag-btn" onclick="cambiarIdioma('en', event)">🇬🇧</button>
+            </div>
+            <div class="portada-content">
+                <h1 data-i18n="titulo_portada">Oráculo Interior</h1>
+                <p data-i18n="desc_portada">Encuentra guía, claridad y comprensión a través de la lectura consciente y la introspección profunda.</p>
+                <button class="btn-primary" onclick="entrarDesdePortada()" data-i18n="btn_comenzar">Comenzar Consulta</button>
+            </div>
+        </div>
 
-<!-- SELECTOR DE BANDERAS FLOTANTE -->
-<div id="flag-selector" class="flag-selector-portada">
-    <button class="flag-btn active" onclick="cambiarIdioma('es', event)" title="Español">🇪🇸</button>
-    <button class="flag-btn" onclick="cambiarIdioma('en', event)" title="English">🇬🇧</button>
-    <button class="flag-btn" onclick="cambiarIdioma('fr', event)" title="Français">🇫🇷</button>
-    <button class="flag-btn" onclick="cambiarIdioma('de', event)" title="Deutsch">🇩🇪</button>
-    <button class="flag-btn" onclick="cambiarIdioma('it', event)" title="Italiano">🇮🇹</button>
-    <button class="flag-btn" onclick="cambiarIdioma('nl', event)" title="Nederlands">🇳🇱</button>
-</div>
+        <!-- VISTA 2: SELECCIÓN DE BARAJA / CATEGORÍA -->
+        <div id="view-deck" class="view">
+            <button class="btn-back" onclick="cambiarVista('view-portada')">&larr; <span data-i18n="volver">Volver</span></button>
+            <h2 data-i18n="selecciona_baraja">Selecciona una categoría</h2>
+            <div class="options-list">
+                <button class="option-button" onclick="seleccionarBaraja('bloqueos')">
+                    <span class="title" data-i18n="cat_bloqueos">Bloqueos Emocionales</span>
+                    <span class="arrow">&rarr;</span>
+                </button>
+                <button class="option-button" onclick="seleccionarBaraja('proposito')">
+                    <span class="title" data-i18n="cat_proposito">Propósito de Vida</span>
+                    <span class="arrow">&rarr;</span>
+                </button>
+            </div>
+        </div>
 
-<div class="app-container">
+        <!-- VISTA 3: OPCIONES ESPECÍFICAS DE LA BARAJA -->
+        <div id="view-options" class="view">
+            <button class="btn-back" onclick="cambiarVista('view-deck')">&larr; <span data-i18n="volver">Volver</span></button>
+            <h2 id="active-deck-label">Opciones</h2>
+            <div id="options-list" class="options-list">
+                <!-- Se llena dinámicamente con JavaScript -->
+            </div>
+        </div>
 
-    <!-- PORTADA -->
-    <div id="view-portada" class="view active">
-        <div>
-            <h1 data-i18n="portada_titulo">Respuestas cuando la mente no se detiene</h1>
-            <p data-i18n="portada_sub">Un espacio de pausa y orientación intuitiva en audio para cada momento de incertidumbre.</p>
-            <button class="btn-portada-entrar" onclick="entrarDesdePortada()">
-                <span data-i18n="btn_iniciar">Iniciar consulta</span> &rarr;
-            </button>
-        </div>
-        <div class="footer-note" style="margin-top: 20px;" data-i18n="footer_texto">
-            Espacio de orientación y pausa consciente.
-        </div>
-    </div>
-
-    <!-- VISTA HOME -->
-    <div id="view-home" class="view">
-        <button class="back-button" onclick="cambiarVista('view-portada')">&larr; <span data-i18n="volver_portada">Volver a la portada</span></button>
-        <div class="header">
-            <h1 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;" data-i18n="home_titulo">¿Dónde necesitas claridad hoy?</h1>
-        </div>
-        <div class="menu-grid">
-            <button class="menu-button" onclick="seleccionarCategoria('bloqueos')">
-                <span class="title" data-i18n="cat_bloqueos">Bloqueos y Agotamiento</span>
-                <span class="arrow">&rarr;</span>
-            </button>
-            <button class="menu-button" onclick="seleccionarCategoria('amor')">
-                <span class="title" data-i18n="cat_amor">Amor y Vínculos</span>
-                <span class="arrow">&rarr;</span>
-            </button>
-            <button class="menu-button" onclick="seleccionarCategoria('trabajo')">
-                <span class="title" data-i18n="cat_trabajo">Trabajo y Abundancia</span>
-                <span class="arrow">&rarr;</span>
-            </button>
-            <button class="menu-button" onclick="seleccionarCategoria('evolucion')">
-                <span class="title" data-i18n="cat_evolucion">Evolución Personal</span>
-                <span class="arrow">&rarr;</span>
-            </button>
-        </div>
-        <div class="footer-note" data-i18n="footer_texto">
-            Espacio de orientación y pausa consciente.
-        </div>
-    </div>
-
-    <!-- VISTA BARAJA -->
-    <div id="view-deck" class="view">
-        <button class="back-button" onclick="cambiarVista('view-home')">&larr; <span data-i18n="volver">Volver</span></button>
-        <div class="header">
-            <h1 style="font-weight: 600; font-size: 1rem;" data-i18n="deck_titulo">Elige la perspectiva analítica para tu lectura.</h1>
-        </div>
-        <div class="menu-grid">
-            <button class="option-button" onclick="seleccionarBaraja('clasico')">
-                <span class="title" data-i18n="deck_clasico">Tarot Clásico (Arquetípico)</span>
-                <span class="arrow">&rarr;</span>
-            </button>
-            <button class="option-button" onclick="seleccionarBaraja('espanola')">
-                <span class="title" data-i18n="deck_espanola">Baraja Española (Directa / Terrenal)</span>
-                <span class="arrow">&rarr;</span>
-            </button>
-            <button class="option-button" onclick="seleccionarBaraja('brujas')">
-                <span class="title" data-i18n="deck_brujas">Tarot de las Brujas / Hadas (Intuitivo)</span>
-                <span class="arrow">&rarr;</span>
-            </button>
-            <button class="option-button" onclick="seleccionarBaraja('vidas')">
-                <span class="title" data-i18n="deck_vidas">Oráculo de Vidas Pasadas (Kármico)</span>
-                <span class="arrow">&rarr;</span>
-            </button>
-        </div>
-        <div class="footer-note" data-i18n="footer_texto">
-            Espacio de orientación y pausa consciente.
-        </div>
-    </div>
-
-    <!-- VISTA OPCIONES ESPECÍFICAS -->
-    <div id="view-options" class="view">
-        <button class="back-button" onclick="cambiarVista('view-deck')">&larr; <span data-i18n="volver">Volver</span></button>
-        <div class="header">
-            <h1 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;" data-i18n="options_titulo">¿Qué describe mejor tu estado actual?</h1>
-        </div>
-        <div class="menu-grid" id="options-list"></div>
-        <div class="footer-note" data-i18n="footer_texto">
-            Espacio de orientación y pausa consciente.
-        </div>
-    </div>
-
-    <!-- VISTA RESULTADO Y AUDIO -->
-    <div id="view-result" class="view">
-        <button class="back-button" onclick="cambiarVista('view-options')">&larr; <span data-i18n="volver">Volver</span></button>
-        <div class="header" style="margin-bottom: 6px;">
-            <h1 id="active-deck-label" style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary);"></h1>
-        </div>
-        <div class="diagnosis-box">
-            <div class="diagnostic-card">
-                <h3 data-i18n="res_friccion_titulo">Punto de fricción</h3>
+        <!-- VISTA 4: RESULTADO Y AUDIO -->
+        <div id="view-result" class="view">
+            <button class="btn-back" onclick="cambiarVista('view-options')">&larr; <span data-i18n="volver">Volver a opciones</span></button>
+            
+            <div class="result-card">
+                <h3 data-i18n="lbl_friccion">Fricción o Bloqueo</h3>
                 <p id="res-friccion">-</p>
             </div>
-            <div class="diagnostic-card">
-                <h3 data-i18n="res_nudo_titulo">El nudo principal</h3>
+
+            <div class="result-card">
+                <h3 data-i18n="lbl_nudo">Nudo a Resolver</h3>
                 <p id="res-nudo">-</p>
             </div>
-            <div class="diagnostic-card">
-                <h3 data-i18n="res_accion_titulo">Brújula (Acción recomendada)</h3>
+
+            <div class="result-card">
+                <h3 data-i18n="lbl_accion">Acción Consciencia</h3>
                 <p id="res-accion">-</p>
             </div>
-            <div class="audio-player-container">
-                <p data-i18n="res_audio_titulo">🎧 Audio de orientación personal</p>
-                <audio controls preload="metadata" id="audio-element">
-                    <source src="" type="audio/mpeg" id="audio-source">
-                    Tu navegador no soporta el elemento de audio.
+
+            <!-- Contenedor del Reproductor de Audio y Subtítulos Dinámicos -->
+            <div class="audio-container">
+                <audio id="audio-element" controls>
+                    <source id="audio-source" src="" type="audio/mpeg">
+                    Tu navegador no soporta elementos de audio.
                 </audio>
                 <div id="subtitle-box" class="subtitle-box">
-                    <span data-i18n="sub_espera">Pulsa play para reproducir el mensaje en audio...</span>
+                    <span>Pulsa play para escuchar el mensaje...</span>
                 </div>
             </div>
         </div>
-        <div class="footer-note" data-i18n="footer_texto" style="margin-bottom: 25px;">
-            Espacio de orientación y pausa consciente.
-        </div>
+
     </div>
 
-</div>
-
-<!-- BOTÓN FLOTANTE DE WHATSAPP -->
-<a href="https://wa.me/34614341782?text=Hola,%20me%20gustaría%20pedir%20información%20sobre%20una%20consulta%20personal." target="_blank" id="whatsapp-btn" class="btn-flotante-consulta">
-    <span>💬</span> <span data-i18n="btn_whatsapp">Pedir Consulta Personal</span>
-</a>
-
-<script>
-let estadoActual = { categoria: '', baraja: '' };
-let idiomaActual = 'es';
-let itemSeleccionadoActual = null;
-
-function entrarDesdePortada() {
-    var musica = document.getElementById('bg-music');
-    if (musica) {
-        musica.volume = 0.07;
-        musica.play().catch(err => console.log("Audio de fondo activado por interacción."));
-    }
-    document.body.classList.remove('portada-activa');
-    cambiarVista('view-home');
-}
-
-function cambiarVista(vistaId) {
-    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    const targetView = document.getElementById(vistaId);
-    if (targetView) {
-        targetView.classList.add('active');
-    }
-    
-    const flagSelector = document.getElementById('flag-selector');
-    const whatsappBtn = document.getElementById('whatsapp-btn');
-    
-    if (vistaId === 'view-portada') {
-        document.body.classList.add('portada-activa');
-        if(flagSelector) flagSelector.style.display = 'flex';
-        if(whatsappBtn) whatsappBtn.style.display = 'none';
-    } else {
-        document.body.classList.remove('portada-activa');
-        if(flagSelector) flagSelector.style.display = 'none';
-        if(whatsappBtn) whatsappBtn.style.display = 'flex';
-    }
-}
-
-const traducciones = {
-    es: {
-        portada_titulo: "Respuestas cuando la mente no se detiene",
-        portada_sub: "Un espacio de pausa y orientación intuitiva en audio para cada momento de incertidumbre.",
-        btn_iniciar: "Iniciar consulta",
-        footer_texto: "Espacio de orientación y pausa consciente.",
-        volver_portada: "Volver a la portada",
-        home_titulo: "¿Dónde necesitas claridad hoy?",
-        cat_bloqueos: "Bloqueos y Agotamiento",
-        cat_amor: "Amor y Vínculos",
-        cat_trabajo: "Trabajo y Abundancia",
-        cat_evolucion: "Evolución Personal",
-        volver: "Volver",
-        deck_titulo: "Elige la perspectiva analítica para tu lectura.",
-        deck_clasico: "Tarot Clásico (Arquetípico)",
-        deck_espanola: "Baraja Española (Directa / Terrenal)",
-        deck_brujas: "Tarot de las Brujas / Hadas (Intuitivo)",
-        deck_vidas: "Oráculo de Vidas Pasadas (Kármico)",
-        options_titulo: "¿Qué describe mejor tu estado actual?",
-        res_friccion_titulo: "Punto de fricción",
-        res_nudo_titulo: "El nudo principal",
-        res_accion_titulo: "Brújula (Acción recomendada)",
-        res_audio_titulo: "🎧 Audio de orientación personal",
-        sub_espera: "Pulsa play para reproducir el mensaje en audio...",
-        btn_whatsapp: "Pedir Consulta Personal",
-        whatsapp_msg: "Hola, me gustaría pedir información sobre una consulta personal."
-    },
-    en: {
-        portada_titulo: "Answers when the mind doesn't stop",
-        portada_sub: "A space for pause and intuitive audio guidance for every moment of uncertainty.",
-        btn_iniciar: "Start consultation",
-        footer_texto: "Space for conscious guidance and pause.",
-        volver_portada: "Back to cover",
-        home_titulo: "Where do you need clarity today?",
-        cat_bloqueos: "Blockages & Exhaustion",
-        cat_amor: "Love & Relationships",
-        cat_trabajo: "Work & Abundance",
-        cat_evolucion: "Personal Evolution",
-        volver: "Back",
-        deck_titulo: "Choose the analytical perspective for your reading.",
-        deck_clasico: "Classic Tarot (Archetypal)",
-        deck_espanola: "Spanish Deck (Direct / Earthy)",
-        deck_brujas: "Witches / Fairies Tarot (Intuitive)",
-        deck_vidas: "Past Lives Oracle (Karmic)",
-        options_titulo: "What best describes your current state?",
-        res_friccion_titulo: "Friction point",
-        res_nudo_titulo: "The main knot",
-        res_accion_titulo: "Compass (Recommended action)",
-        res_audio_titulo: "🎧 Personal guidance audio",
-        sub_espera: "Press play to listen to the audio message...",
-        btn_whatsapp: "Request Personal Consultation",
-        whatsapp_msg: "Hello, I would like to request information about a personal consultation."
-    },
-    fr: {
-        portada_titulo: "Des réponses quand l'esprit ne s'arrête pas",
-        portada_sub: "Un espace de pause et d'orientation intuitive en audio pour chaque moment d'incertitude.",
-        btn_iniciar: "Commencer la consultation",
-        footer_texto: "Espace d'orientation et de pause consciente.",
-        volver_portada: "Retour à l'accueil",
-        home_titulo: "Où avez-vous besoin de clarté aujourd'hui ?",
-        cat_bloqueos: "Blocages et Épuisement",
-        cat_amor: "Amour et Relations",
-        cat_trabajo: "Travail et Abondance",
-        cat_evolucion: "Évolution Personnelle",
-        volver: "Retour",
-        deck_titulo: "Choisissez la perspective analytique pour votre tirage.",
-        deck_clasico: "Tarot Classique (Archétypal)",
-        deck_espanola: "Jeu Espagnol (Direct / Terrien)",
-        deck_brujas: "Tarot des Sorcières / Fées (Intuitif)",
-        deck_vidas: "Oracle des Vies Antérieures (Karmique)",
-        options_titulo: "Qu'est-ce qui décrit le mieux votre état actuel ?",
-        res_friccion_titulo: "Point de friction",
-        res_nudo_titulo: "Le nœud principal",
-        res_accion_titulo: "Boussole (Action recommandée)",
-        res_audio_titulo: "🎧 Audio d'orientation personnelle",
-        sub_espera: "Appuyez sur lecture pour écouter le message audio...",
-        btn_whatsapp: "Demander une consultation",
-        whatsapp_msg: "Bonjour, j'aimerais demander des informations sur une consultation personnelle."
-    },
-    de: {
-        portada_titulo: "Antworten, wenn der Geist nicht zur Ruhe kommt",
-        portada_sub: "Ein Raum für Innehalten und intuitive Audio-Führung für jeden Moment der Ungewissheit.",
-        btn_iniciar: "Beratung starten",
-        footer_texto: "Raum für bewusste Orientierung und Innehalten.",
-        volver_portada: "Zurück zum Start",
-        home_titulo: "Wo brauchst du heute Klarheit?",
-        cat_bloqueos: "Blockaden & Erschöpfung",
-        cat_amor: "Liebe & Beziehungen",
-        cat_trabajo: "Arbeit & Fülle",
-        cat_evolucion: "Persönliche Entwicklung",
-        volver: "Zurück",
-        deck_titulo: "Wähle die analytische Perspektive für deine Legung.",
-        deck_clasico: "Klassisches Tarot (Archetypisch)",
-        deck_espanola: "Spanisches Blatt (Direkt / Erde)",
-        deck_brujas: "Hexen / Feen Tarot (Intuitiv)",
-        deck_vidas: "Orakel der früheren Leben (Karmisch)",
-        options_titulo: "Was beschreibt deinen aktuellen Zustand am besten?",
-        res_friccion_titulo: "Reibungspunkt",
-        res_nudo_titulo: "Der Hauptknoten",
-        res_accion_titulo: "Kompass (Empfohlene Handlung)",
-        res_audio_titulo: "🎧 Persönliches Orientierungs-Audio",
-        sub_espera: "Drücke auf Play, um die Audiobotschaft anzuhören...",
-        btn_whatsapp: "Persönliche Beratung anfragen",
-        whatsapp_msg: "Hallo, ich möchte gerne Informationen über eine persönliche Beratung anfordern."
-    },
-    it: {
-        portada_titulo: "Risposte quando la mente non si ferma",
-        portada_sub: "Uno spazio di pausa e orientamento intuitivo in audio per ogni momento di incertezza.",
-        btn_iniciar: "Inizia consultazione",
-        footer_texto: "Spazio di orientamento e pausa cosciente.",
-        volver_portada: "Torna alla copertina",
-        home_titulo: "Dove hai bisogno di chiarezza oggi?",
-        cat_bloqueos: "Blocchi e Esaurimento",
-        cat_amor: "Amore e Legami",
-        cat_trabajo: "Lavoro e Abbondanza",
-        cat_evolucion: "Evoluzione Personale",
-        volver: "Indietro",
-        deck_titulo: "Scegli la prospettiva analitica per la tua lettura.",
-        deck_clasico: "Tarocchi Classici (Archetipici)",
-        deck_espanola: "Mazzo Spagnolo (Diretto / Terreno)",
-        deck_brujas: "Tarocchi delle Streghe / Fate (Intuitivo)",
-        deck_vidas: "Oracolo delle Vite Passate (Karmico)",
-        options_titulo: "Cosa descrive meglio il tuo stato attuale?",
-        res_friccion_titulo: "Punto di attrito",
-        res_nudo_titulo: "Il nodo principale",
-        res_accion_titulo: "Bussola (Azione consigliata)",
-        res_audio_titulo: "🎧 Audio di orientamento personale",
-        sub_espera: "Premi play per ascoltare il messaggio audio...",
-        btn_whatsapp: "Richiedi Consulto Personale",
-        whatsapp_msg: "Salve, vorrei informazioni per un consulto personale."
-    },
-    nl: {
-        portada_titulo: "Antwoorden wanneer de geest niet stopt",
-        portada_sub: "Een ruimte voor pauze en intuïtive audiobegeleiding voor elk moment van onzekerheid.",
-        btn_iniciar: "Start consult",
-        footer_texto: "Ruimte voor bewuste oriëntatie en pauze.",
-        volver_portada: "Terug naar omslag",
-        home_titulo: "Waar heb je vandaag helderheid nodig?",
-        cat_bloqueos: "Blokkades & Uitputting",
-        cat_amor: "Liefde & Relaties",
-        cat_trabajo: "Werk & Overvloed",
-        cat_evolucion: "Persoonlijke Evolutie",
-        volver: "Terug",
-        deck_titulo: "Kies het analytische perspectief voor je legging.",
-        deck_clasico: "Klassieke Tarot (Archetypisch)",
-        deck_espanola: "Spaanse Set (Direct / Aards)",
-        deck_brujas: "Heksen / Feeën Tarot (Intuïtief)",
-        deck_vidas: "Orakel van Vorige Levens (Karmisch)",
-        options_titulo: "Wat beschrijft je huidige staat het best?",
-        res_friccion_titulo: "Wrijvingspunt",
-        res_nudo_titulo: "De hoofdknoop",
-        res_accion_titulo: "Kompass (Aanbevolen actie)",
-        res_audio_titulo: "🎧 Persoonlijke oriëntatie-audio",
-        sub_espera: "Druk op afspelen om naar het audiobericht te luisteren...",
-        btn_whatsapp: "Persoonlijk Consult Aanvragen",
-        whatsapp_msg: "Hallo, ik wil graag informatie aanvragen over een persoonlijk consult."
-    }
-};
-
-const nombresBarajas = {
-    clasico: { es: "Tarot Clásico (Arquetípico)", en: "Classic Tarot (Archetypal)", fr: "Tarot Classique (Archétypal)", de: "Klassisches Tarot (Archetypisch)", it: "Tarocchi Classici (Archetipici)", nl: "Klassieke Tarot (Archetypisch)" },
-    espanola: { es: "Baraja Española (Directa / Terrenal)", en: "Spanish Deck (Direct / Earthy)", fr: "Jeu Espagnol (Direct / Terrien)", de: "Spanisches Blatt (Direkt / Erde)", it: "Mazzo Spagnolo (Diretto / Terreno)", nl: "Spaanse Set (Direct / Aards)" },
-    brujas: { es: "Tarot de las Brujas / Hadas (Intuitivo)", en: "Witches / Fairies Tarot (Intuitive)", fr: "Tarot des Sorcières / Fées (Intuitif)", de: "Hexen / Feen Tarot (Intuitiv)", it: "Tarocchi delle Streghe / Fate (Intuitivo)", nl: "Heksen / Feeën Tarot (Intuïtief)" },
-    vidas: { es: "Oráculo de Vidas Pasadas (Kármico)", en: "Past Lives Oracle (Karmic)", fr: "Oracle des Vies Antérieures (Karmique)", de: "Orakel der früheren Leben (Karmisch)", it: "Oracolo delle Vite Passate (Karmico)", nl: "Orakel van Vorige Levens (Karmisch)" }
-};
-
-const baseDeDatos = {
-    bloqueos: [
-        { 
-            texto: { es: "Siento la mente estancada y no avanzo.", en: "I feel my mind is stuck and I'm not moving forward.", fr: "Je sens que mon esprit est bloqué et je n'avance pas.", de: "Ich fühle, dass mein Geist feststeckt und ich nicht vorankomme.", it: "Sento la mente bloccata e non vado avanti.", nl: "Ik voel dat mijn geest vastzit en ik kom niet vooruit." },
-            friccion: { es: "Estás intentando procesar demasiadas cosas a la vez con un nivel de energía bajo mínimos.", en: "You are trying to process too many things at once with minimal energy levels.", fr: "Vous essayez de traiter trop de choses à la fois avec un niveau d'énergie au plus bas.", de: "Du versuchst, zu viele Dinge gleichzeitig zu verarbeiten, mit minimaler Energie.", it: "Stai cercando di elaborare troppe cose insieme con un livello di energia al minimo.", nl: "Je probeert te veel tegelijk te verwerken met een minimaal energieniveau." },
-            nudo: { es: "La autoexigencia constante por querer controlar lo que pasará mañana.", en: "Constant self-demand to control what will happen tomorrow.", fr: "L'exigence constante de vouloir contrôler ce qui se passera demain.", de: "Der ständige Leistungsdruck, alles kontrollieren zu wollen, was morgen passiert.", it: "La costante autoesigenza di voler controllare cosa accadrà domani.", nl: "De constante zelfoplegging om te willen controleren wat er morgen gebeurt." },
-            accion: { es: "Hoy queda prohibido tomar decisiones drásticas. Elige una tarea pequeña y descansa.", en: "Today, making drastic decisions is forbidden. Choose one small task and rest.", fr: "Aujourd'hui, il est interdit de prendre des décisions drastiques. Choisissez une petite tâche et reposez-vous.", de: "Heute ist es verboten, drastische Entscheidungen zu treffen. Wähle eine kleine Aufgabe und ruhe dich aus.", it: "Oggi è vietato prendere decisioni drastiche. Scegli un piccolo compito e riposati.", nl: "Vandaag is het verboden drastische beslissingen te nemen. Kies één kleine taak en rust uit." },
-            audio: "audios/bloqueo_mental.mp3",
-            subtitulos: [
-                { tiempo: 0.0, texto: "Aquí escribes lo que dice tu audio en el segundo 0..." },
-                { tiempo: 4.0, texto: "Aquí cambias al siguiente segmento de tiempo..." },
-                { tiempo: 8.5, texto: "Y aquí la última frase de tu locución." }
-            ]
-        },
-        { 
-            texto: { es: "Hay una situación externa que frena por completo.", en: "There is an external situation that completely halts progress.", fr: "Il y a une situation externe qui freine complètement.", de: "Es gibt eine äußere Situation, die alles komplett ausbremst.", it: "C'è una situazione externa che frena completamente.", nl: "Er is een externe situatie die alles volledig afremt." },
-            friccion: { es: "Te estás desgastando intentando mover una rueda que depende de factores ajenos.", en: "You are wearing yourself out trying to turn a wheel that depends on external factors.", fr: "Vous vous épuisez à essayer de faire tourner une roue qui dépend de facteurs extérieurs.", de: "Du reibst dich auf, ein Rad zu drehen, das von äußeren Faktoren abhängt.", it: "Ti stai logorando cercando di muovere una ruota che dipende da fattori esterni.", nl: "Je put jezelf uit door te proberen een wiel te draaien dat afhangt van externe factoren." },
-            nudo: { es: "Resistencia a aceptar los tiempos y los imprevistos duros del entorno.", en: "Resistance to accept the timing and harsh unexpected events of the environment.", fr: "Résistance à accepter les temps et les imprévus durs de l'environnement.", de: "Widerstand gegen die Annahme von Zeiten und harten unvorhergesehenen Ereignissen.", it: "Resistenza ad accettare i tempi e gli imprevisti duri dell'ambiente.", nl: "Weerstand tegen het accepteren van de timing en harde onvoorziene gebeurtenissen." },
-            accion: { es: "Pon el foco únicamente en tu metro cuadrado. Lo demás se reordenará solo.", en: "Focus solely on your square meter. Everything else will rearrange itself.", fr: "Concentrez-vous uniquement sur votre mètre carré. Le reste se réorganisera tout seul.", de: "Konzentriere dich nur auf deinen eigenen Bereich. Der Rest ordnet sich von selbst.", it: "Concentrati solo sul tuo metro quadro. Il resto si riordinerà da solo.", nl: "Focus je uitsluitend op je eigen cirkel. De rest ordent zich vanzelf." },
-            audio: "audios/bloqueo_externo.mp3",
-            subtitulos: [
-                { tiempo: 0.0, texto: "Frase inicial de este audio..." },
-                { tiempo: 5.0, texto: "Siguiente frase según los segundos reales..." }
-            ]
-        }
-    ],
-    amor: [
-        { 
-            texto: { es: "Siento distancia o desconexión en el vínculo.", en: "I feel distance or disconnection in the bond.", fr: "Je ressens de la distance ou une déconnexion dans le lien.", de: "Ich spüre Distanz oder Trennung in der Verbindung.", it: "Sento distanza o disconnessione nel legame.", nl: "Ik voel afstand of ontkoppeling in de band." },
-            friccion: { es: "Expectativas no expresadas que generan fricción silenciosa.", en: "Unexpressed expectations generating silent friction.", fr: "Attentes non exprimées générant une friction silencieuse.", de: "Nicht ausgesprochene Erwartungen erzeugen stille Reibung.", it: "Aspettative non espresse che generano attrito silenzioso.", nl: "Niet-uitgesproken verwachtingen die stille wrijving veroorzaken." },
-            nudo: { es: "Miedo a mostrar vulnerabilidad real por temor al rechazo.", en: "Fear of showing real vulnerability due to fear of rejection.", fr: "Peur de montrer une vraie vulnérabilité par peur du rejet.", de: "Angst, echte Verletzlichkeit zu zeigen aus Furcht vor Ablehnung.", it: "Paura di mostrare vera vulnerabilità per timore del rifiuto.", nl: "Angst om echte kwetsbaarheid te tonen uit angst voor afwijzing." },
-            accion: { es: "Habla desde tu sentir íntimo sin reclamar ni culpar.", en: "Speak from your intimate feeling without demanding or blaming.", fr: "Parlez depuis votre ressenti intime sans réclamer ni blâmer.", de: "Sprich aus deinem inneren Gefühl, ohne Vorwürfe oder Forderungen.", it: "Parla dal tuo sentire intimo senza pretendere o colpevolizzare.", nl: "Spreek vanuit je diepste gevoel zonder te eisen of de schuld te geven." },
-            audio: "audios/amor_distancia.mp3",
-            subtitulos: [
-                { tiempo: 0.0, texto: "Frase inicial de este audio..." }
-            ]
-        }
-    ],
-    trabajo: [
-        { 
-            texto: { es: "Incertidumbre o falta de rumbo profesional.", en: "Uncertainty or lack of professional direction.", fr: "Incertitude ou manque de direction professionnelle.", de: "Ungewissheit oder fehlende berufliche Richtung.", it: "Incertezza o mancanza di direzione professionale.", nl: "Onzekerheid of gebrek aan professionele richting." },
-            friccion: { es: "Estás en una encrucijada donde el modelo antiguo ya no encaja.", en: "You are at a crossroads where the old model no longer fits.", fr: "Vous êtes à la croisée des chemins où l'ancien modèle ne correspond plus.", de: "Du stehst an einem Scheideweg, an dem das alte Modell nicht mehr passt.", it: "Ti trovi a un bivio in cui il vecchio modello non calza più.", nl: "Je staat op een kruispunt waar het oude model niet meer past." },
-            nudo: { es: "Miedo al salto al vacío o a perder la falsa estabilidad.", en: "Fear of the leap into the void or losing false stability.", fr: "Peur du saut dans le vide ou de perdre une fausse stabilité.", de: "Angst vor dem Sprung ins Leere oder dem Verlust falscher Stabilität.", it: "Paura del salto nel vuoto o di perdere una falsa stabilità.", nl: "Angst voor de sprong in het duister of het verliezen van valse stabiliteit." },
-            accion: { es: "Define tus líneas rojas y empieza a mover hilos en silencio.", en: "Define your red lines and start moving strings in silence.", fr: "Définissez vos lignes rouges et commencez à bouger les fils en silence.", de: "Definiere deine roten Linien und ziehe im Stillen die Fäden.", it: "Definisci le tue linee rose e inizia a muovere i fili in silenzio.", nl: "Bepaal je rode lijnen en begin in stilte aan de touwtjes te trekken." },
-            audio: "audios/trabajo_cambio.mp3",
-            subtitulos: [
-                { tiempo: 0.0, texto: "Frase inicial de este audio..." }
-            ]
-        }
-    ],
-    evolucion: [
-        { 
-            texto: { es: "Siento que estoy cerrando una etapa muy pesada.", en: "I feel I am closing a very heavy stage.", fr: "Je sens que mon esprit est bloqué et je n'avance pas.", de: "Ich habe das Gefühl, eine sehr schwere Phase abzuschließen.", it: "Sento che sto chiudendo una fase molto pesante.", nl: "Ik voel dat ik een zeer zware fase afsluit." },
-            friccion: { es: "El duelo de dejar atrás lo conocido aunque ya no te aporte vida.", en: "The grief of leaving behind the known even if it no longer brings life.", fr: "Le deuil de laisser derrière soi le connu même s'il ne vous apporte plus de vie.", de: "Die Trauer, das Bekannte hinter sich zu lassen, auch wenn es kein Leben mehr bringt.", it: "Il lutto di lasciarsi alle spalle il noto anche se non ti dà più vita.", nl: "De rouw om het bekende achter te laten, zelfs als het geen leven meer brengt." },
-            nudo: { es: "Sensación de vacío intermedio entre lo viejo y lo nuevo.", en: "Feeling of intermediate emptiness between the old and the new.", fr: "Sentiment de vide intermédiaire entre l'ancien et le nouveau.", de: "Gefühl der Leere zwischen dem Alten und dem Neuen.", it: "Sensazione di vuoto intermedio tra il vecchio e il nuovo.", nl: "Gevoel van leegte tussen het oude en het nieuwe." },
-            accion: { es: "Abraza el vacío. No corras a llenarlo con distracciones.", en: "Embrace the void. Don't rush to fill it with distractions.", fr: "Embrassez le vide. Ne vous précipitez pas pour le remplir.", de: "Umarme die Leere. Eile nicht, sie mit Ablenkungen zu füllen.", it: "Abbraccia il vuoto. Non correre a riempirlo con distrazioni.", nl: "Omarm de leegte. Haast je niet om deze te vullen." },
-            audio: "audios/evolucion_ciclo.mp3",
-            subtitulos: [
-                { tiempo: 0.0, texto: "Frase inicial de este audio..." }
-            ]
-        }
-    ]
-};
-
-function cambiarIdioma(lang, ev) {
-    idiomaActual = lang;
-    document.querySelectorAll('.flag-btn').forEach(b => b.classList.remove('active'));
-    if(ev && ev.currentTarget) {
-        ev.currentTarget.classList.add('active');
-    }
-    
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (traducciones[lang] && traducciones[lang][key]) {
-            el.textContent = traducciones[lang][key];
-        }
-    });
-
-    const whatsappBtn = document.getElementById('whatsapp-btn');
-    if (whatsappBtn && traducciones[lang]['whatsapp_msg']) {
-        whatsappBtn.href = `https://wa.me/34614341782?text=${encodeURIComponent(traducciones[lang]['whatsapp_msg'])}`;
-    }
-
-    if (estadoActual.categoria) {
-        poblarOpciones();
-    }
-}
-
-function seleccionarCategoria(cat) {
-    estadoActual.categoria = cat;
-    cambiarVista('view-deck');
-}
-
-function seleccionarBaraja(baraja) {
-    estadoActual.baraja = baraja;
-    poblarOpciones();
-    cambiarVista('view-options');
-}
-
-function poblarOpciones() {
-    const contenedor = document.getElementById('options-list');
-    if (!contenedor) return;
-    contenedor.innerHTML = '';
-    
-    const items = baseDeDatos[estadoActual.categoria] || [];
-    items.forEach((item) => {
-        const textoOpcion = item.texto[idiomaActual] || item.texto['es'];
-        const btn = document.createElement('button');
-        btn.className = 'menu-button';
-        btn.innerHTML = `<span class="title">${textoOpcion}</span><span class="arrow">&rarr;</span>`;
-        btn.onclick = () => mostrarResultado(item);
-        contenedor.appendChild(btn);
-    });
-}
-
-function mostrarResultado(item) {
-    itemSeleccionadoActual = item;
-    
-    const labelBaraja = document.getElementById('active-deck-label');
-    if (labelBaraja && nombresBarajas[estadoActual.baraja] && nombresBarajas[estadoActual.baraja][idiomaActual]) {
-        labelBaraja.textContent = nombresBarajas[estadoActual.baraja][idiomaActual];
-    }
-
-    const friccionEl = document.getElementById('res-friccion');
-    const nudoEl = document.getElementById('res-nudo');
-    const accionEl = document.getElementById('res-accion');
-
-    if (friccionEl) friccionEl.textContent = item.friccion[idiomaActual] || item.friccion['es'];
-    if (nudoEl) nudoEl.textContent = item.nudo[idiomaActual] || item.nudo['es'];
-    if (accionEl) accionEl.textContent = item.accion[idiomaActual] || item.accion['es'];
-
-    const audioSource = document.getElementById('audio-source');
-    const audioElement = document.getElementById('audio-element');
-    
-    if (audioSource && audioElement) {
-        audioSource.src = item.audio;
-        audioElement.load();
-    }
-
-    const subtitleBox = document.getElementById('subtitle-box');
-    if (subtitleBox && traducciones[idiomaActual]) {
-        subtitleBox.innerHTML = `<span>${traducciones[idiomaActual]['sub_espera']}</span>`;
-    }
-
-    if (audioElement) {
-        audioElement.ontimeupdate = function() {
-            if (!item.subtitulos || !subtitleBox) return;
-            let currentTime = audioElement.currentTime;
-            let textoActivo = traducciones[idiomaActual] ? traducciones[idiomaActual]['sub_espera'] : "Reproduciendo...";
-            
-            for (let i = 0; i < item.subtitulos.length; i++) {
-                if (currentTime >= item.subtitulos[i].tiempo) {
-                    textoActivo = item.subtitulos[i].texto;
-                }
+    <script>
+        // --- 1. DICCIONARIO DE TRADUCCIONES ESTÁTICAS ---
+        const traducciones = {
+            es: {
+                titulo_portada: "Oráculo Interior",
+                desc_portada: "Encuentra guía, claridad y comprensión a través de la lectura consciente y la introspección profunda.",
+                btn_comenzar: "Comenzar Consulta",
+                volver: "Volver",
+                selecciona_baraja: "Selecciona una categoría",
+                cat_bloqueos: "Bloqueos Emocionales",
+                cat_proposito: "Propósito de Vida",
+                lbl_friccion: "Fricción o Bloqueo",
+                lbl_nudo: "Nudo a Resolver",
+                lbl_accion: "Acción Consciencia",
+                sub_espera: "Pulsa play para escuchar el mensaje..."
+            },
+            en: {
+                titulo_portada: "Inner Oracle",
+                desc_portada: "Find guidance, clarity, and understanding through conscious reading and deep introspection.",
+                btn_comenzar: "Start Consultation",
+                volver: "Back",
+                selecciona_baraja: "Select a category",
+                cat_bloqueos: "Emotional Blockages",
+                cat_proposito: "Life Purpose",
+                lbl_friccion: "Friction or Blockage",
+                lbl_nudo: "Knot to Resolve",
+                lbl_accion: "Conscious Action",
+                sub_espera: "Press play to listen to the message..."
             }
-            subtitleBox.innerHTML = `<span>${textoActivo}</span>`;
         };
-    }
 
-    cambiarVista('view-result');
-}
-</script>
+        const nombresBarajas = {
+            bloqueos: { es: "Bloqueos Emocionales", en: "Emotional Blockages" },
+            proposito: { es: "Propósito de Vida", en: "Life Purpose" }
+        };
 
+        // --- 2. BASE DE DATOS DE CONTENIDO (CON AUDIO Y SUBTÍTULOS SINCRONIZADOS) ---
+        // Los tiempos (tiempo: segundos) marcan en qué momento exacto del audio aparece cada frase.
+        const baseDeDatos = {
+            bloqueos: [
+                {
+                    texto: { es: "Miedo al rechazo o juicio ajeno", en: "Fear of rejection or external judgment" },
+                    friccion: { es: "Te retienes de expresar tu verdadera opinión por complacer.", en: "You hold back your true opinion to please others." },
+                    nudo: { es: "Confundes el amor de los demás con la validación constante.", en: "You confuse love with constant validation." },
+                    accion: { es: "Di 'no' a una pequeña exigencia externa hoy sin dar explicaciones.", en: "Say 'no' to a small external demand today without explanations." },
+                    audio: "audios/bloqueo_1.mp3",
+                    subtitulos: [
+                        { tiempo: 0.0, texto: "Analicemos este bloqueo..." },
+                        { tiempo: 3.5, texto: "Estás conteniéndote por buscar aprobación externa." },
+                        { tiempo: 8.0, texto: "Es momento de priorizar tu propia voz interior." }
+                    ]
+                },
+                {
+                    texto: { es: "Resistencia al cambio y apego al control", en: "Resistance to change and attachment to control" },
+                    friccion: { es: "Intentas planificar cada detalle sufriendo imprevistos.", en: "You try to plan every detail, suffering when things shift." },
+                    nudo: { es: "Miedo profundo a la incertidumbre del futuro.", en: "Deep fear of the uncertainty of the future." },
+                    accion: { es: "Suelta una expectativa rígida que tengas para esta semana.", en: "Let go of a rigid expectation you hold for this week." },
+                    audio: "audios/bloqueo_2.mp3",
+                    subtitulos: [
+                        { tiempo: 0.0, texto: "El control excesivo genera agotamiento." },
+                        { tiempo: 4.0, texto: "Permítete fluir con lo que la vida te presenta." }
+                    ]
+                }
+            ],
+            proposito: [
+                {
+                    texto: { es: "Alineación de talentos ocultos", en: "Alignment of hidden talents" },
+                    friccion: { es: "Realizas tareas que apagan tu energía creativa.", en: "You perform tasks that drain your creative energy." },
+                    nudo: { es: "Desconexión entre lo que haces por obligación y tu vocación.", en: "Disconnection between duty and your true calling." },
+                    accion: { es: "Dedica 20 minutos hoy a una actividad que te apasione sin buscar frutos económicos.", en: "Spend 20 minutes today on a passion project without monetary goals." },
+                    audio: "audios/proposito_1.mp3",
+                    subtitulos: [
+                        { tiempo: 0.0, texto: "Tu propósito vive donde descansa tu entusiasmo." },
+                        { tiempo: 5.0, texto: "Vuelve a conectar con aquello que te hace perder la noción del tiempo." }
+                    ]
+                }
+            ]
+        };
+
+        // --- 3. ESTADO DE LA APLICACIÓN ---
+        let idiomaActual = 'es';
+        let estadoActual = {
+            categoria: '',
+            baraja: ''
+        };
+        let subtitulosActuales = [];
+
+        // --- 4. FUNCIONES DE NAVEGACIÓN ENTRE VISTAS ---
+        function cambiarVista(idVista) {
+            document.querySelectorAll('.view').forEach(view => {
+                view.classList.remove('active');
+            });
+            document.getElementById(idVista).classList.add('active');
+            
+            // Pausar audio al cambiar de vista si salimos de resultados
+            if (idVista !== 'view-result') {
+                const audio = document.getElementById('audio-element');
+                audio.pause();
+            }
+        }
+
+        function entrarDesdePortada() {
+            cambiarVista('view-deck');
+        }
+
+        function cambiarBaraja(barajaKey) {
+            estadoActual.baraja = barajaKey;
+            
+            // Actualizar etiqueta superior
+            const label = document.getElementById('active-deck-label');
+            label.textContent = nombresBarajas[barajaKey][idiomaActual];
+
+            // Rellenar lista de opciones dinámicamente
+            const listContainer = document.getElementById('options-list');
+            listContainer.innerHTML = '';
+
+            const items = baseDeDatos[barajaKey] || [];
+            
+            items.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-button';
+                const textoOpcion = item.texto[idiomaActual] || item.texto['es'];
+                btn.innerHTML = `<span class="title">${textoOpcion}</span><span class="arrow">&rarr;</span>`;
+                btn.onclick = () => mostrarResultado(barajaKey, index);
+                listContainer.appendChild(btn);
+            });
+
+            cambiarVista('view-options');
+        }
+
+        // Mantenemos compatibilidad con el evento onclick del HTML original
+        function seleccionarBaraja(barajaKey) {
+            estadoActual.categoria = barajaKey;
+            cambiarBaraja(barajaKey);
+        }
+
+        // --- 5. MOSTRAR RESULTADOS Y CARGAR AUDIO/SUBTÍTULOS ---
+        function mostrarResultado(categoria, index) {
+            const item = baseDeDatos[categoria][index];
+
+            // Cargar textos en pantalla
+            document.getElementById('res-friccion').textContent = item.friccion[idiomaActual] || item.friccion['es'];
+            document.getElementById('res-nudo').textContent = item.nudo[idiomaActual] || item.nudo['es'];
+            document.getElementById('res-accion').textContent = item.accion[idiomaActual] || item.accion['es'];
+
+            // Configurar reproductor de audio
+            const audioElement = document.getElementById('audio-element');
+            const audioSource = document.getElementById('audio-source');
+            
+            audioSource.src = item.audio;
+            subtitulosActuales = item.subtitulos || [];
+            
+            const subtitleBox = document.getElementById('subtitle-box');
+            const textoEspera = traducciones[idiomaActual].sub_espera;
+            subtitleBox.innerHTML = `<span>${textoEspera}</span>`;
+
+            audioElement.load();
+            cambiarVista('view-result');
+        }
+
+        // --- 6. SINCRONIZACIÓN DE SUBTÍTULOS EN TIEMPO REAL ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const audioElement = document.getElementById('audio-element');
+            const subtitleBox = document.getElementById('subtitle-box');
+
+            if (audioElement) {
+                audioElement.addEventListener('timeupdate', () => {
+                    if (!subtitulosActuales || subtitulosActuales.length === 0) return;
+                    
+                    const tiempoActual = audioElement.currentTime;
+                    let textoActivo = "";
+
+                    // Recorre los subtítulos y selecciona el que corresponde al segundo actual
+                    for (let i = 0; i < subtitulosActuales.length; i++) {
+                        if (tiempoActual >= subtitulosActuales[i].tiempo) {
+                            textoActivo = subtitulosActuales[i].texto;
+                        }
+                    }
+
+                    if (textoActivo) {
+                        subtitleBox.innerHTML = `<span>${textoActivo}</span>`;
+                    }
+                });
+            }
+        });
+
+        // --- 7. CAMBIO DE IDIOMA DINÁMICO ---
+        function cambiarIdioma(lang, event) {
+            idiomaActual = lang;
+            
+            // Actualizar estilo visual de banderas
+            document.querySelectorAll('.flag-btn').forEach(btn => btn.classList.remove('active'));
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.add('active');
+            }
+
+            // Traducir elementos fijos con atributo data-i18n
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (traducciones[lang] && traducciones[lang][key]) {
+                    el.textContent = traducciones[lang][key];
+                }
+            });
+
+            // Si está en la vista de barajas, actualizar el título superior dinámicamente
+            if (estadoActual.baraja && nombresBarajas[estadoActual.baraja]) {
+                const label = document.getElementById('active-deck-label');
+                label.textContent = nombresBarajas[estadoActual.baraja][idiomaActual];
+            }
+        }
+    </script>
 </body>
 </html>
-  
-  
