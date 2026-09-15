@@ -1,7 +1,4 @@
-
-  
-  
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -487,7 +484,7 @@ function entrarDesdePortada() {
     var musica = document.getElementById('bg-music');
     if (musica) {
         musica.volume = 0.07;
-        musica.play().catch(err => console.log("Audio de fondo gestionado por políticas del navegador."));
+        musica.play().catch(err => console.log("Audio de fondo activado por interacción."));
     }
     document.body.classList.remove('portada-activa');
     cambiarVista('view-home');
@@ -689,9 +686,9 @@ const baseDeDatos = {
             accion: { es: "Hoy queda prohibido tomar decisiones drásticas. Elige una tarea pequeña y descansa.", en: "Today, making drastic decisions is forbidden. Choose one small task and rest.", fr: "Aujourd'hui, il est interdit de prendre des décisions drastiques. Choisissez une petite tâche et reposez-vous.", de: "Heute ist es verboten, drastische Entscheidungen zu treffen. Wähle eine kleine Aufgabe und ruhe dich aus.", it: "Oggi è vietato prendere decisioni drastiche. Scegli un piccolo compito e riposati.", nl: "Vandaag is het verboden drastische beslissingen te nemen. Kies één kleine taak en rust uit." },
             audio: "audios/bloqueo_mental.mp3",
             subtitulos: [
-                { tiempo: 0.0, texto: "Estás intentando procesar demasiadas cosas a la vez." },
-                { tiempo: 4.5, texto: "La autoexigencia constante te está bloqueando." },
-                { tiempo: 9.0, texto: "Elige una tarea pequeña hoy y descansa." }
+                { tiempo: 0.0, texto: "Aquí escribes lo que dice tu audio en el segundo 0..." },
+                { tiempo: 4.0, texto: "Aquí cambias al siguiente segmento de tiempo..." },
+                { tiempo: 8.5, texto: "Y aquí la última frase de tu locución." }
             ]
         },
         { 
@@ -701,9 +698,8 @@ const baseDeDatos = {
             accion: { es: "Pon el foco únicamente en tu metro cuadrado. Lo demás se reordenará solo.", en: "Focus solely on your square meter. Everything else will rearrange itself.", fr: "Concentrez-vous uniquement sur votre mètre carré. Le reste se réorganisera tout seul.", de: "Konzentriere dich nur auf deinen eigenen Bereich. Der Rest ordnet sich von selbst.", it: "Concentrati solo sul tuo metro quadro. Il resto si riordinerà da solo.", nl: "Focus je uitsluitend op je eigen cirkel. De rest ordent zich vanzelf." },
             audio: "audios/bloqueo_externo.mp3",
             subtitulos: [
-                { tiempo: 0.0, texto: "Te estás desgastando con factores ajenos." },
-                { tiempo: 5.0, texto: "Hay resistencia a aceptar los tiempos del entorno." },
-                { tiempo: 10.0, texto: "Pon el foco únicamente en tu metro cuadrado." }
+                { tiempo: 0.0, texto: "Frase inicial de este audio..." },
+                { tiempo: 5.0, texto: "Siguiente frase según los segundos reales..." }
             ]
         }
     ],
@@ -715,9 +711,7 @@ const baseDeDatos = {
             accion: { es: "Habla desde tu sentir íntimo sin reclamar ni culpar.", en: "Speak from your intimate feeling without demanding or blaming.", fr: "Parlez depuis votre ressenti intime sans réclamer ni blâmer.", de: "Sprich aus deinem inneren Gefühl, ohne Vorwürfe oder Forderungen.", it: "Parla dal tuo sentire intimo senza pretendere o colpevolizzare.", nl: "Spreek vanuit je diepste gevoel zonder te eisen of de schuld te geven." },
             audio: "audios/amor_distancia.mp3",
             subtitulos: [
-                { tiempo: 0.0, texto: "Hay expectativas no expresadas generando fricción." },
-                { tiempo: 5.0, texto: "El miedo al rechazo frena la vulnerabilidad." },
-                { tiempo: 10.0, texto: "Habla desde tu sentir íntimo sin reclamar." }
+                { tiempo: 0.0, texto: "Frase inicial de este audio..." }
             ]
         }
     ],
@@ -729,23 +723,19 @@ const baseDeDatos = {
             accion: { es: "Define tus líneas rojas y empieza a mover hilos en silencio.", en: "Define your red lines and start moving strings in silence.", fr: "Définissez vos lignes rouges et commencez à bouger les fils en silence.", de: "Definiere deine roten Linien und ziehe im Stillen die Fäden.", it: "Definisci le tue linee rose e inizia a muovere i fili in silenzio.", nl: "Bepaal je rode lijnen en begin in stilte aan de touwtjes te trekken." },
             audio: "audios/trabajo_cambio.mp3",
             subtitulos: [
-                { tiempo: 0.0, texto: "El modelo antiguo profesional ya no encaja." },
-                { tiempo: 4.5, texto: "El miedo a perder la falsa estabilidad paraliza." },
-                { tiempo: 9.5, texto: "Define tus líneas rojas y muévete en silencio." }
+                { tiempo: 0.0, texto: "Frase inicial de este audio..." }
             ]
         }
     ],
     evolucion: [
         { 
-            texto: { es: "Siento que estoy cerrando una etapa muy pesada.", en: "I feel I am closing a very heavy stage.", fr: "Je sens que je ferme une étape très lourde.", de: "Ich habe das Gefühl, eine sehr schwere Phase abzuschließen.", it: "Sento che sto chiudendo una fase molto pesante.", nl: "Ik voel dat ik een zeer zware fase afsluit." },
+            texto: { es: "Siento que estoy cerrando una etapa muy pesada.", en: "I feel I am closing a very heavy stage.", fr: "Je sens que mon esprit est bloqué et je n'avance pas.", de: "Ich habe das Gefühl, eine sehr schwere Phase abzuschließen.", it: "Sento che sto chiudendo una fase molto pesante.", nl: "Ik voel dat ik een zeer zware fase afsluit." },
             friccion: { es: "El duelo de dejar atrás lo conocido aunque ya no te aporte vida.", en: "The grief of leaving behind the known even if it no longer brings life.", fr: "Le deuil de laisser derrière soi le connu même s'il ne vous apporte plus de vie.", de: "Die Trauer, das Bekannte hinter sich zu lassen, auch wenn es kein Leben mehr bringt.", it: "Il lutto di lasciarsi alle spalle il noto anche se non ti dà più vita.", nl: "De rouw om het bekende achter te laten, zelfs als het geen leven meer brengt." },
             nudo: { es: "Sensación de vacío intermedio entre lo viejo y lo nuevo.", en: "Feeling of intermediate emptiness between the old and the new.", fr: "Sentiment de vide intermédiaire entre l'ancien et le nouveau.", de: "Gefühl der Leere zwischen dem Alten und dem Neuen.", it: "Sensazione di vuoto intermedio tra il vecchio e il nuovo.", nl: "Gevoel van leegte tussen het oude en het nieuwe." },
             accion: { es: "Abraza el vacío. No corras a llenarlo con distracciones.", en: "Embrace the void. Don't rush to fill it with distractions.", fr: "Embrassez le vide. Ne vous précipitez pas pour le remplir.", de: "Umarme die Leere. Eile nicht, sie mit Ablenkungen zu füllen.", it: "Abbraccia il vuoto. Non correre a riempirlo con distrazioni.", nl: "Omarm de leegte. Haast je niet om deze te vullen." },
             audio: "audios/evolucion_ciclo.mp3",
             subtitulos: [
-                { tiempo: 0.0, texto: "Estás haciendo el duelo de dejar lo conocido." },
-                { tiempo: 4.5, texto: "La sensación de vacío intermedio es real." },
-                { tiempo: 9.0, texto: "Abraza este espacio sin buscar distracciones." }
+                { tiempo: 0.0, texto: "Frase inicial de este audio..." }
             ]
         }
     ]
@@ -852,3 +842,5 @@ function mostrarResultado(item) {
 
 </body>
 </html>
+  
+  
